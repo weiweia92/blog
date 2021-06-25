@@ -34,7 +34,7 @@ Answer:
 (c) (5 points) Compute the partial derivatives of ![](https://latex.codecogs.com/png.image?\dpi{110}%20J_{naive-softmax}(v_c,%20o,%20U)) with respect to each of the ‘outside’ word vectors, ![](https://latex.codecogs.com/png.image?\dpi{110}%20u_w)’s. There will be two cases: when ![](https://latex.codecogs.com/png.image?\dpi{110}%20w=o), the true ‘outside’ word vector, and ![](https://latex.codecogs.com/png.image?\dpi{110}%20w\neq%20o), for all other words. Please write you answer in terms of ![](https://latex.codecogs.com/png.image?\dpi{110}%20y,\hat{y}) and ![](https://latex.codecogs.com/png.image?\dpi{110}%20U)
 
 ![](https://latex.codecogs.com/png.image?\dpi{110}%20\frac{\partial%20J(v_c,o,U)}{\partial%20u_w}==\frac{\partial%20u_o^Tv_c}{\partial%20u_w}+\frac{\partial%20(log\sum_{w\in%20Vocab}exp(u_w^Tv_c))}{\partial%20u_w})   
-当 ![](https://latex.codecogs.com/png.image?\dpi{110}%20w\neq%20o) 时     
-![](https://latex.codecogs.com/png.image?\dpi{110}%20-\frac{\partial%20u_o^Tv_c}{\partial%20u_w}=0)    
+当 ![](https://latex.codecogs.com/png.image?\dpi{110}%20w\neq%20o) 时 ![](https://latex.codecogs.com/png.image?\dpi{110}%20-\frac{\partial%20u_o^Tv_c}{\partial%20u_w}=0)    
+
 ![](https://latex.codecogs.com/png.image?\dpi{110}%20\therefore%20\frac{\partial%20J}{\partial%20u_w}=\frac{\partial%20(log\sum_{w%20\in%20Vocab}exp(u_w^Tv_c))}{\partial%20u_w}=\frac{1}{\sum_{w%20\in%20Vocab}exp(u_w^Tv_c)}\sum_{w%20\in%20Vocab}exp(u_w^Tv_c)v_c)     
 
