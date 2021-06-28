@@ -377,7 +377,7 @@ c 是正确词的 one-hot 向量的索引。我们现在可以考虑我们的预
 
 ### Skip-Gram Model
 
-Skip-Gram模型与CBOW大体相同，但是交换了我们的 x 和 y，即 CBOW 中的 x 现在是 y，y 现在是 x。输入的 one-hot 向量（中心词）我们表示为 x，输出向量为![]（https://latex.codecogs.com/png.image?\dpi{110}%20y^{j})。我们定义的![](https://latex.codecogs.com/png.image?\dpi{110}%20\nu)
+Skip-Gram模型与CBOW大体相同，但是交换了我们的 x 和 y，即 CBOW 中的 x 现在是 y，y 现在是 x。输入的 one-hot 向量（中心词）我们表示为 x，输出向量为![](https://latex.codecogs.com/png.image?\dpi{110}%20y^{j})。我们定义的![](https://latex.codecogs.com/png.image?\dpi{110}%20\nu)
 和![](https://latex.codecogs.com/png.image?\dpi{110}%20u)是和CBOW一样的
 
 * 生成中心词的one-hot向量![](https://latex.codecogs.com/png.image?\dpi{110}%20x%20\in%20\mathbb{R}^{|V|})
@@ -484,9 +484,10 @@ Hierarchical softmax 使用一个二叉树来表示词表中的所有词。树�
 
 这个公式看起来非常复杂，让我们细细梳理一下。
 
-首先，我们将根据从根节点![](https://latex.codecogs.com/png.image?\dpi{110}%20(n(w,1)))到叶节点![](https://latex.codecogs.com/png.image?\dpi{110}%20w)的路径的形状来计算相乘的项。如果我们假设![](https://latex.codecogs.com/png.image?\dpi{110}%20ch(n))一直都是n的左节点，然后当路径往左时，![](https://latex.codecogs.com/png.image?\dpi{110}%20[n(w,j+1)=ch(n(w,j)])的返回值为1，往右返回值为0.
+首先，我们将根据从根节点![](https://latex.codecogs.com/png.image?\dpi{110}%20(n(w,1)))到叶节点![](https://latex.codecogs.com/png.image?\dpi{110}%20w)的路径的形状来计算相乘的项。如果我们假设![](https://latex.codecogs.com/png.image?\dpi{110}%20ch(n))一直都是n的左节点，然后当路径往左时，
+![](https://latex.codecogs.com/png.image?\dpi{110}%20[n(w,j+1)=ch(n(w,j))]) 的返回值为1，往右返回值为0.
 
-此外![](https://latex.codecogs.com/png.image?\dpi{110}%20[n(w,j+1)=ch(n(w,j)])提供了归一化的作用。在节点n处，如果我们将去往左和右的节点概率相加，对于![](https://latex.codecogs.com/png.image?\dpi{110}%20v_n^Tv_{w_i})的任何值则可以检查
+此外![](https://latex.codecogs.com/png.image?\dpi{110}%20[n(w,j+1)=ch(n(w,j))]) 提供了归一化的作用。在节点n处，如果我们将去往左和右的节点概率相加，对于![](https://latex.codecogs.com/png.image?\dpi{110}%20v_n^Tv_{w_i})的任何值则可以检查
 
 ![](https://latex.codecogs.com/png.image?\dpi{110}%20\sigma(v_n^Tv_{w_i})+\sigma(-v_n^Tv_{w_i})=1)
 
