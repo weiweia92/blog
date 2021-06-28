@@ -13,7 +13,9 @@ Recall from lectures that, for a single pair of words c and o, the loss is given
 Another way to view this loss is as the cross-entropy between the true distribution ![](https://latex.codecogs.com/png.image?\dpi{110}%20y) and the predicted
 distribution ![](https://latex.codecogs.com/png.image?\dpi{110}%20\hat{y}) Here, both ![](https://latex.codecogs.com/png.image?\dpi{110}%20y) and ![](https://latex.codecogs.com/png.image?\dpi{110}%20\hat{y}) are vectors with length equal to the number of words in the vocabulary.Furthermore, the ![](https://latex.codecogs.com/png.image?\dpi{110}%20k^{th}) entry in these vectors indicates the conditional probability of the ![](https://latex.codecogs.com/png.image?\dpi{110}%20k^{th}) word being an ‘outside word’ for the given c. The true empirical distribution ![](https://latex.codecogs.com/png.image?\dpi{110}%20y) is a one-hot vector with a 1 for the true outside word ![](https://latex.codecogs.com/png.image?\dpi{110}%20o) , and 0 everywhere else. The predicted distribution ![](https://latex.codecogs.com/png.image?\dpi{110}%20\hat{y}) is the probability distribution  ![](https://latex.codecogs.com/png.image?\dpi{110}%20P(O|C=c))given by our model in equation (1).  
 
-(a) (3 points) Show that the naive-softmax loss given in Equation (2) is the same as the cross-entropy loss
+### (a) (3 points) 
+
+Show that the naive-softmax loss given in Equation (2) is the same as the cross-entropy loss
 between ![](https://latex.codecogs.com/png.image?\dpi{110}%20y) and ![](https://latex.codecogs.com/png.image?\dpi{110}%20\hat{y}) ; i.e.,show that 
 
 ![](https://latex.codecogs.com/png.image?\dpi{110}%20-\sum_{w%20\in{Vocab}}y_w%20log(\hat{y}_w)=-log(\hat{y_o}))&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp; &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;(3)   
@@ -24,7 +26,9 @@ Answer:
 
 ![](https://latex.codecogs.com/png.image?\dpi{110}%20-\sum_{w%20\in{Vocab}}y_w%20log(\hat{y}_w)=-y_olog(\hat{y_o})-\sum_{w%20\in%20Vocab,w\neq%20o}y_wlog(\hat{y_w})=-log(\hat{y_o}))
  
-(b) (5 points) Compute the partial derivative of &ensp; ![](https://latex.codecogs.com/png.image?\dpi{110}%20J_{naive-softmax}(v_c,%20o,%20U)) &ensp; with respect to ![](https://latex.codecogs.com/png.image?\dpi{110}%20v_c) . Please write your answer in terms of ![](https://latex.codecogs.com/png.image?\dpi{110}%20y,\hat{y}) and ![](https://latex.codecogs.com/png.image?\dpi{110}%20v_c).  
+### (b) (5 points) 
+
+Compute the partial derivative of &ensp; ![](https://latex.codecogs.com/png.image?\dpi{110}%20J_{naive-softmax}(v_c,%20o,%20U)) &ensp; with respect to ![](https://latex.codecogs.com/png.image?\dpi{110}%20v_c) . Please write your answer in terms of ![](https://latex.codecogs.com/png.image?\dpi{110}%20y,\hat{y}) and ![](https://latex.codecogs.com/png.image?\dpi{110}%20v_c).  
 
 Answer:
 
@@ -37,7 +41,9 @@ Answer:
 &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;![](https://latex.codecogs.com/png.image?\dpi{110}%20=-u_o+\sum_{w\in%20Vocab}\hat{y_w}u_w)   
 &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;![](https://latex.codecogs.com/png.image?\dpi{110}%20U(\hat{y}-y))
 
-(c) (5 points) Compute the partial derivatives of ![](https://latex.codecogs.com/png.image?\dpi{110}%20J_{naive-softmax}(v_c,%20o,%20U)) with respect to each of the ‘outside’ word vectors, ![](https://latex.codecogs.com/png.image?\dpi{110}%20u_w)’s. There will be two cases: when ![](https://latex.codecogs.com/png.image?\dpi{110}%20w=o), the true ‘outside’ word vector, and ![](https://latex.codecogs.com/png.image?\dpi{110}%20w\neq%20o), for all other words. Please write you answer in terms of ![](https://latex.codecogs.com/png.image?\dpi{110}%20y,\hat{y}) and ![](https://latex.codecogs.com/png.image?\dpi{110}%20U)
+### (c) (5 points) 
+
+Compute the partial derivatives of ![](https://latex.codecogs.com/png.image?\dpi{110}%20J_{naive-softmax}(v_c,%20o,%20U)) with respect to each of the ‘outside’ word vectors, ![](https://latex.codecogs.com/png.image?\dpi{110}%20u_w)’s. There will be two cases: when ![](https://latex.codecogs.com/png.image?\dpi{110}%20w=o), the true ‘outside’ word vector, and ![](https://latex.codecogs.com/png.image?\dpi{110}%20w\neq%20o), for all other words. Please write you answer in terms of ![](https://latex.codecogs.com/png.image?\dpi{110}%20y,\hat{y}) and ![](https://latex.codecogs.com/png.image?\dpi{110}%20U)
 
 Answer:
 
@@ -58,7 +64,9 @@ Then:
 
 ![](https://latex.codecogs.com/png.image?\dpi{110}%20\frac{\partial%20J(v_c,o,%20U)}{\partial%20U}=v_c(\hat{y}-y)^T)
 
-(d)The sigmoid function is given by the follow Equation :
+### (d)
+
+The sigmoid function is given by the follow Equation :
 
 ![](https://latex.codecogs.com/png.image?\dpi{110}%20\sigma(x)=\frac{1}{1+e^{-x}}=\frac{e^x}{e^x+1})
 
@@ -71,7 +79,9 @@ Answer:
 
 ![](https://latex.codecogs.com/png.image?\dpi{110}%20=\begin{bmatrix}\sigma%27{(x_1)}%20&%200%20&%20\cdots%20%20&%200%20\\%200&%20\sigma%27{(x_2)}%20&%20\cdots%20%20&%200%20\\%20\vdots%20&%20\vdots%20&%20\vdots%20%20&%20\vdots%20%20\\%200&%200%20&%20\cdots%20%20&%20\sigma%27{(x_d)}%20\\\end{bmatrix}%20=diag(\sigma%27(x)))
 
-(e)Now we shall consider the Negative Sampling loss, which is an alternative to the Naive Softmax loss. Assume that ![](https://latex.codecogs.com/png.image?\dpi{110}%20K) negative samples (words) are drawn from the vocabulary. For simplicity of notation we shall refer to them as ![](https://latex.codecogs.com/png.image?\dpi{110}%20w_1,w_2,...,w_K) and their outside vectors as ![](https://latex.codecogs.com/png.image?\dpi{110}%20u_1,...,u_K). Note that ![](https://latex.codecogs.com/png.image?\dpi{110}%20o%20\notin%20\{w_1,...,w_K%20\}) . For a center word ![](https://latex.codecogs.com/png.image?\dpi{110}%20c) and an outside word ![](https://latex.codecogs.com/png.image?\dpi{110}%20o), the negative sampling loss function is given by:  
+### (e)
+
+Now we shall consider the Negative Sampling loss, which is an alternative to the Naive Softmax loss. Assume that ![](https://latex.codecogs.com/png.image?\dpi{110}%20K) negative samples (words) are drawn from the vocabulary. For simplicity of notation we shall refer to them as ![](https://latex.codecogs.com/png.image?\dpi{110}%20w_1,w_2,...,w_K) and their outside vectors as ![](https://latex.codecogs.com/png.image?\dpi{110}%20u_1,...,u_K). Note that ![](https://latex.codecogs.com/png.image?\dpi{110}%20o%20\notin%20\{w_1,...,w_K%20\}) . For a center word ![](https://latex.codecogs.com/png.image?\dpi{110}%20c) and an outside word ![](https://latex.codecogs.com/png.image?\dpi{110}%20o), the negative sampling loss function is given by:  
 
 ![](https://latex.codecogs.com/png.image?\dpi{110}%20J_{neg-sample}(v_c,o,U)=-log(\sigma(u_o^Tv_c))-\sum_{k=1}^Klog(\sigma(-u_k^Tv_c)))    
 
@@ -117,7 +127,9 @@ For negative sampling loss function:
 
 从求得的偏导数中我们可以看出，原始的softmax函数每次对 ![](https://latex.codecogs.com/png.image?\dpi{110}%20v_c)进行反向传播时，需要与 output vector matrix 进行大量且复杂的矩阵运算，而负采样中的计算复杂度则不再与词表大小 ![](https://latex.codecogs.com/png.image?\dpi{110}%20V)有关，而是与采样数量 ![](https://latex.codecogs.com/png.image?\dpi{110}%20K) 有关。  
 
-(f)Suppose the center word is ![](https://latex.codecogs.com/png.image?\dpi{110}%20c=w_t) and the context window is ![](https://latex.codecogs.com/png.image?\dpi{110}%20\[%20w_{t-m},...,w_{t-1},w_t,w_{t+1},...,w_{t+m}\]) ,where ![](https://latex.codecogs.com/png.image?\dpi{110}%20m) is the context window size. Recall that for the skip-gram version of**word2vec**,the total loss for the context window is 
+### (f)
+
+Suppose the center word is ![](https://latex.codecogs.com/png.image?\dpi{110}%20c=w_t) and the context window is ![](https://latex.codecogs.com/png.image?\dpi{110}%20\[%20w_{t-m},...,w_{t-1},w_t,w_{t+1},...,w_{t+m}\]) ,where ![](https://latex.codecogs.com/png.image?\dpi{110}%20m) is the context window size. Recall that for the skip-gram version of**word2vec**,the total loss for the context window is 
 
 ![](https://latex.codecogs.com/png.image?\dpi{110}%20J_{skip-gram}(v_c,w_{t-m},...,w_{t+m},U)=\sum_{-m\leq%20j\leq%20m%20\%20j\neq%20o}J(v_c,w_{t+j},U))    
 
