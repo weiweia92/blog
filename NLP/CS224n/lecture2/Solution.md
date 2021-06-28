@@ -26,6 +26,8 @@ Answer:
  
 (b) (5 points) Compute the partial derivative of &ensp; ![](https://latex.codecogs.com/png.image?\dpi{110}%20J_{naive-softmax}(v_c,%20o,%20U)) &ensp; with respect to ![](https://latex.codecogs.com/png.image?\dpi{110}%20v_c) . Please write your answer in terms of ![](https://latex.codecogs.com/png.image?\dpi{110}%20y,\hat{y}) and ![](https://latex.codecogs.com/png.image?\dpi{110}%20v_c).  
 
+Answer:
+
 ![](https://latex.codecogs.com/png.image?\dpi{110}%20J_{naive-softmax}(v_c,o,U)=-log(P(O=o|C=c)))      
 &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;![](https://latex.codecogs.com/png.image?\dpi{110}%20=-log(\frac{exp(u_o^Tv_c)}{\sum_{w\in%20Vocab}exp(u_w^Tv_c)})=-u_o^Tv_c+log(\sum_{w\in%20Vocab}exp(u_w^T%20v_c)))
 ![](https://latex.codecogs.com/png.image?\dpi{110}%20\frac{\partial%20J_{naive-softmax(v_c,o,U)}}{\partial%20v_c}=-u_o+\frac{\partial%20(log(\sum_{w\in%20Vocab}exp(u_w^T%20v_c)))}{\partial%20v_c})     
@@ -36,6 +38,8 @@ Answer:
 &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;![](https://latex.codecogs.com/png.image?\dpi{110}%20U(\hat{y}-y))
 
 (c) (5 points) Compute the partial derivatives of ![](https://latex.codecogs.com/png.image?\dpi{110}%20J_{naive-softmax}(v_c,%20o,%20U)) with respect to each of the ‘outside’ word vectors, ![](https://latex.codecogs.com/png.image?\dpi{110}%20u_w)’s. There will be two cases: when ![](https://latex.codecogs.com/png.image?\dpi{110}%20w=o), the true ‘outside’ word vector, and ![](https://latex.codecogs.com/png.image?\dpi{110}%20w\neq%20o), for all other words. Please write you answer in terms of ![](https://latex.codecogs.com/png.image?\dpi{110}%20y,\hat{y}) and ![](https://latex.codecogs.com/png.image?\dpi{110}%20U)
+
+Answer:
 
 ![](https://latex.codecogs.com/png.image?\dpi{110}%20\frac{\partial%20J(v_c,o,U)}{\partial%20u_w}==\frac{\partial%20u_o^Tv_c}{\partial%20u_w}+\frac{\partial%20(log\sum_{w\in%20Vocab}exp(u_w^Tv_c))}{\partial%20u_w})   
 当 ![](https://latex.codecogs.com/png.image?\dpi{110}%20w\neq%20o) 时   
@@ -60,6 +64,8 @@ Then:
 
 Please compute the derivative of ![](https://latex.codecogs.com/png.image?\dpi{110}%20\sigma(x)) with respect to ![](https://latex.codecogs.com/png.image?\dpi{110}%20x), where ![](https://latex.codecogs.com/png.image?\dpi{110}%20x) is a vector.     
 
+Answer:
+
 ![](https://latex.codecogs.com/png.image?\dpi{110}%20\frac{\partial%20\sigma{(x_i)}}{\partial%20x_i}=\frac{1}{(1+exp(-x_i))^2}exp(-x_i)=\sigma(x_i)(1-\sigma(x_i)))   
 ![](https://latex.codecogs.com/png.image?\dpi{110}%20\frac{\partial%20\sigma{(x)}}{\partial%20x}=\begin{bmatrix}\frac{\partial%20\sigma(x_j)}{\partial%20x_i}\end{bmatrix}_{d\times%20d})        
 
@@ -72,6 +78,8 @@ Please compute the derivative of ![](https://latex.codecogs.com/png.image?\dpi{1
 for a sample  ![](https://latex.codecogs.com/png.image?\dpi{110}%20w_1,w_2,...,w_K) ,where ![](https://latex.codecogs.com/png.image?\dpi{110}%20\sigma(\cdot)) is sigmoid function.
 
 Please repeat parts b and c, computing the partial derivatives of ![](https://latex.codecogs.com/png.image?\dpi{110}%20J_{neg-sample}) respect to ![](https://latex.codecogs.com/png.image?\dpi{110}%20v_c),with respect to ![](https://latex.codecogs.com/png.image?\dpi{110}%20u_o), and with respect to a negative sample ![](https://latex.codecogs.com/png.image?\dpi{110}%20u_k).Please write your answers in terms of the vectors ![](https://latex.codecogs.com/png.image?\dpi{110}%20u_o),![](https://latex.codecogs.com/png.image?\dpi{110}%20v_c) and ![](https://latex.codecogs.com/png.image?\dpi{110}%20u_k), where ![](https://latex.codecogs.com/png.image?\dpi{110}%20k%20\in%20[1,K]). After you've done this, describe with one sentence why this loss function is much more efficient to compute than the naive-softmax loss. Note, you should be able to use your solution to part (d) to help compute the necessary gradients here.
+
+Answer:
 
 For ![](https://latex.codecogs.com/png.image?\dpi{110}%20v_c):
 
@@ -109,9 +117,6 @@ For negative sampling loss function:
 
 从求得的偏导数中我们可以看出，原始的softmax函数每次对 ![](https://latex.codecogs.com/png.image?\dpi{110}%20v_c)进行反向传播时，需要与 output vector matrix 进行大量且复杂的矩阵运算，而负采样中的计算复杂度则不再与词表大小 ![](https://latex.codecogs.com/png.image?\dpi{110}%20V)有关，而是与采样数量 ![](https://latex.codecogs.com/png.image?\dpi{110}%20K) 有关。  
 
-(f)Suppose the center word is![]() and the contec
-从求得的偏导数中我们可以看出，原始的softmax函数每次对 ![](https://latex.codecogs.com/png.image?\dpi{110}%20v_c)进行反向传播时，需要与 output vector matrix 进行大量且复杂的矩阵运算，而负采样中的计算复杂度则不再与词表大小 ![](https://latex.codecogs.com/png.image?\dpi{110}%20V)有关，而是与采样数量 ![](https://latex.codecogs.com/png.image?\dpi{110}%20K) 有关。 
-
 (f)Suppose the center word is ![](https://latex.codecogs.com/png.image?\dpi{110}%20c=w_t) and the context window is ![](https://latex.codecogs.com/png.image?\dpi{110}%20\[%20w_{t-m},...,w_{t-1},w_t,w_{t+1},...,w_{t+m}\]) ,where ![](https://latex.codecogs.com/png.image?\dpi{110}%20m) is the context window size. Recall that for the skip-gram version of**word2vec**,the total loss for the context window is 
 
 ![](https://latex.codecogs.com/png.image?\dpi{110}%20J_{skip-gram}(v_c,w_{t-m},...,w_{t+m},U)=\sum_{-m\leq%20j\leq%20m%20\%20j\neq%20o}J(v_c,w_{t+j},U))    
@@ -129,5 +134,7 @@ Write down three partial derivatives:
 Write your answers in terms of ![](https://latex.codecogs.com/png.image?\dpi{110}%20\partial%20J(v_c,w_{t+j},U)/%20\partial%20U) and ![](https://latex.codecogs.com/png.image?\dpi{110}%20\partial%20J(v_c,w_{t+j},U)/%20\partial%20v_c) .This is very simple-each solution should be one line.
 
 **Once you're done**:Given that you computed the derivatives of ![](https://latex.codecogs.com/png.image?\dpi{110}%20\partial%20J(v_c,w_{t+j},U)) with respect of all the model parameters ![](https://latex.codecogs.com/png.image?\dpi{110}%20U) and ![](https://latex.codecogs.com/png.image?\dpi{110}%20V) in parts a to c, you have now computed the derivatives of the full loss function ![](https://latex.codecogs.com/png.image?\dpi{110}%20J_{skip-gram}) with respect to all parameters, You're ready to implement **word2vec**.
+
+Answer:
 
 ![]()
