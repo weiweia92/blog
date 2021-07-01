@@ -5,12 +5,12 @@ import argparse
 import numpy as np
 import random
 import sys
-sys.path.insert(0,'/User/leexuewei/blog/NLP/CS224n/lecture2')
+sys.path.insert(0,'/User/leexuewei/blog/NLP/CS224n/lecture2/a2/')
 
 from utils.gradcheck import gradcheck_naive, grad_tests_softmax, grad_tests_negsamp
 from utils.utils import normalizeRows, softmax
 
-ipdb.set_trace()
+#ipdb.set_trace()
 
 def sigmoid(x):
     """

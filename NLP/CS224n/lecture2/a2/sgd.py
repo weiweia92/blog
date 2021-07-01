@@ -60,7 +60,7 @@ def sgd(f, x0, step, iterations, postprocessing=None, useSaved=False,
     x -- the parameter value after SGD finishes
     """
 
-    # Anneal learning rate every several iterations
+    # Anneal learning rate every several iterations 退火学习率
     ANNEAL_EVERY = 20000
 
     if useSaved:
@@ -86,7 +86,8 @@ def sgd(f, x0, step, iterations, postprocessing=None, useSaved=False,
 
         loss = None
         ### YOUR CODE HERE (~2 lines)
-
+        loss, dx = f(x)
+        x -= step * dx
         ### END YOUR CODE
 
         x = postprocessing(x)

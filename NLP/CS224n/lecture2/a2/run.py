@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-
+import sys
+sys.path.insert(0,'/Users/leexuewei/blog/NLP/CS224n/lecture2/a2/')
 import random
 import numpy as np
 from utils.treebank import StanfordSentiment
