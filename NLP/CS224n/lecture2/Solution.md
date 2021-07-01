@@ -37,10 +37,7 @@ Answer:
 ![](https://latex.codecogs.com/png.image?\dpi{110}%20\frac{\partial%20J_{naive-softmax(v_c,o,U)}}{\partial%20v_c}=-u_o+\frac{\partial%20(log(\sum_{w\in%20Vocab}exp(u_w^T%20v_c)))}{\partial%20v_c})     
 &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;![](https://latex.codecogs.com/png.image?\dpi{110}%20=u_o+\frac{1}{\sum_{w\in%20Vocab}exp(u_w^Tv_c)}\sum_{w\in%20Vocab}\frac{\partial%20(exp(u_w^T%20v_c))}{\partial%20v_c})        
 &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;![](https://latex.codecogs.com/png.image?\dpi{110}%20=-u_o+\frac{1}{\sum_{w\in%20Vocab}exp(u_w^T%20v_c)}\sum_{w\in%20Vocab}exp(u_w^T%20v_c)u_w)      
-&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;![](https://latex.codecogs.com/png.image?\dpi{110}%20=-u_o+\sum_{w\in%20Vocab}P(O=w|C=c)u_w)       
-&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;![](https://latex.codecogs.com/png.image?\dpi{110}%20=-u_o+\sum_{w\in%20Vocab}\hat{y_w}u_w)   
-&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;![](https://latex.codecogs.com/png.image?\dpi{110}%20U(\hat{y}-y))
-
+![](https://github.com/weiweia92/blog/blob/main/NLP/CS224n/lecture2/img/Screen%20Shot%202021-07-01%20at%204.15.13%20PM.png)
 ### (c) (5 points) 
 
 Compute the partial derivatives of ![](https://latex.codecogs.com/png.image?\dpi{110}%20J_{naive-softmax}(v_c,%20o,%20U)) with respect to each of the ‘outside’ word vectors, ![](https://latex.codecogs.com/png.image?\dpi{110}%20u_w)’s. There will be two cases: when ![](https://latex.codecogs.com/png.image?\dpi{110}%20w=o), the true ‘outside’ word vector, and ![](https://latex.codecogs.com/png.image?\dpi{110}%20w\neq%20o), for all other words. Please write you answer in terms of ![](https://latex.codecogs.com/png.image?\dpi{110}%20y,\hat{y}) and ![](https://latex.codecogs.com/png.image?\dpi{110}%20U)
@@ -62,7 +59,7 @@ Answer:
 
 Then:
 
-![](https://latex.codecogs.com/png.image?\dpi{110}%20\frac{\partial%20J(v_c,o,%20U)}{\partial%20U}=v_c(\hat{y}-y)^T)
+![](https://github.com/weiweia92/blog/blob/main/NLP/CS224n/lecture2/img/Screen%20Shot%202021-07-01%20at%204.26.44%20PM.png)
 
 ### (d)
 
