@@ -71,10 +71,7 @@ Please compute the derivative of ![](https://latex.codecogs.com/png.image?\dpi{1
 
 Answer:
 
-![](https://latex.codecogs.com/png.image?\dpi{110}%20\frac{\partial%20\sigma{(x_i)}}{\partial%20x_i}=\frac{1}{(1+exp(-x_i))^2}exp(-x_i)=\sigma(x_i)(1-\sigma(x_i)))   
-![](https://latex.codecogs.com/png.image?\dpi{110}%20\frac{\partial%20\sigma{(x)}}{\partial%20x}=\begin{bmatrix}\frac{\partial%20\sigma(x_j)}{\partial%20x_i}\end{bmatrix}_{d\times%20d})        
-
-![](https://latex.codecogs.com/png.image?\dpi{110}%20=\begin{bmatrix}\sigma%27{(x_1)}%20&%200%20&%20\cdots%20%20&%200%20\\%200&%20\sigma%27{(x_2)}%20&%20\cdots%20%20&%200%20\\%20\vdots%20&%20\vdots%20&%20\vdots%20%20&%20\vdots%20%20\\%200&%200%20&%20\cdots%20%20&%20\sigma%27{(x_d)}%20\\\end{bmatrix}%20=diag(\sigma%27(x)))
+![](https://github.com/weiweia92/blog/blob/main/NLP/CS224n/lecture2/img/Screen%20Shot%202021-07-01%20at%204.30.16%20PM.png)
 
 ### (e)
 
