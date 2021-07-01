@@ -62,7 +62,7 @@ Answer:
 
 Then:
 
-![](https://latex.codecogs.com/png.image?\dpi{110}%20\frac{\partial%20J(v_c,o,%20U)}{\partial%20U}=v_c(\hat{y}-y)^T)
+![](https://github.com/weiweia92/blog/blob/main/NLP/CS224n/lecture2/img/Screen%20Shot%202021-07-01%20at%204.26.44%20PM.png)
 
 ### (d)
 
