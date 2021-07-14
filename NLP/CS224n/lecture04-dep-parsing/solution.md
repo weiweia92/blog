@@ -19,4 +19,13 @@ explain:
 
 ## 2.Neural Transition-Based Dependency Parsing
 
-![](https://github.com/weiweia92/blog/blob/main/NLP/pic/Screen%20Shot%202021-07-14%20at%208.34.57%20PM.png)
+![](https://github.com/weiweia92/blog/blob/main/NLP/pic/Screen%20Shot%202021-07-14%20at%208.34.57%20PM.png)   
+
+**(b)** A sentence with n words will be parsed in 2n steps. Every word in the buffer needs to be eventually put on the stack which takes n steps. Eventually each word has to be removed from the stack to form a dependency which takes another n steps.    
+
+**(c)** Coding  
+
+**(d)** Coding   
+
+**(e)** Results    
+
