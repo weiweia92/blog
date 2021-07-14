@@ -17,4 +17,6 @@ explain:
 
 &ensp;&ensp;&nbsp;ii. One way to look at dropout regularization is as an ensemble learning method that combines many different weaker classifier. Each classifier is train to some extent separately and learns a different aspect of the problem. During evaluation we wouldn't be leveraging(利用) all the learned experience from the different classifiers. If we apply dropout during the evaluation period, the evaluation result will be random and will not reflect the true performance of the model, which violates the original intention of regularization. By disabling dropout during the evaluation period, the performance of the model and the effect of regularization can be observed to ensure that the parameters of the model are updated correctly.     
 
+## 2.Neural Transition-Based Dependency Parsing
 
+![](https://github.com/weiweia92/blog/blob/main/NLP/pic/Screen%20Shot%202021-07-14%20at%208.34.57%20PM.png)
