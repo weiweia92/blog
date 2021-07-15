@@ -29,3 +29,5 @@ explain:
 
 **(e)** Results    
 ![](https://github.com/weiweia92/blog/blob/main/NLP/pic/Screen%20Shot%202021-07-15%20at%204.55.43%20PM.png)
+![](https://github.com/weiweia92/blog/blob/main/NLP/pic/Screen%20Shot%202021-07-15%20at%205.04.13%20PM.png)
+![](https://github.com/weiweia92/blog/blob/main/NLP/pic/Screen%20Shot%202021-07-15%20at%205.04.22%20PM.png)
