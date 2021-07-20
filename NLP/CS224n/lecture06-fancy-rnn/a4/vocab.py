@@ -23,6 +23,7 @@ from collections import Counter
 from docopt import docopt
 from itertools import chain
 import json
+import ipdb
 import torch
 from typing import List
 from utils import read_corpus, pad_sents
@@ -30,7 +31,7 @@ import sentencepiece as spm
 
 
 class VocabEntry(object):
-    """ Vocabulary Entry, i.e. structure containing either
+    """ Vocabulary Entry(词汇输入), i.e. structure containing either
     src or tgt language terms.
     """
     def __init__(self, word2id=None):
@@ -49,7 +50,7 @@ class VocabEntry(object):
         self.id2word = {v: k for k, v in self.word2id.items()}
 
     def __getitem__(self, word):
-        """ Retrieve word's index. Return the index for the unk
+        """ Retrieve(检索) word's index. Return the index for the unk
         token if the word is out of vocabulary.
         @param word (str): word to look up.
         @returns index (int): index of word 
@@ -78,7 +79,7 @@ class VocabEntry(object):
         """ Representation of VocabEntry to be used
         when printing the object.
         """
-        return 'Vocabulary[size=%d]' % len(self)
+        return f'Vocabulary[size={len(self)}]' 
 
     def id2word(self, wid):
         """ Return mapping of index to word.
@@ -231,6 +232,7 @@ if __name__ == '__main__':
 
     src_sents = get_vocab_list(args['--train-src'], source='src', vocab_size=21000)         
     tgt_sents = get_vocab_list(args['--train-tgt'], source='tgt', vocab_size=8000)
+    ipdb.set_trace()
     vocab = Vocab.build(src_sents, tgt_sents)
     print('generated vocabulary, source %d words, target %d words' % (len(src_sents), len(tgt_sents)))
 

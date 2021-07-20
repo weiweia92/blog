@@ -12,6 +12,7 @@ from collections import namedtuple
 import sys
 from typing import List, Tuple, Dict, Set, Union
 import torch
+from torch._C import SourceRange
 import torch.nn as nn
 import torch.nn.utils
 import torch.nn.functional as F
@@ -41,7 +42,7 @@ class NMT(nn.Module):
         self.hidden_size = hidden_size
         self.dropout_rate = dropout_rate
         self.vocab = vocab
-
+        #self.embed_size = embed_size
         # default values
         self.encoder = None 
         self.decoder = None
@@ -77,8 +78,27 @@ class NMT(nn.Module):
         ###     Dropout Layer:
         ###         https://pytorch.org/docs/stable/nn.html#torch.nn.Dropout
 
+        #nn.LSTM()
+        #args:input_size:每个词的维度
+        #     hidden_size
+        #     num_layers:LSTM层数，默认为1
+        #     bias:默认为True
+        #     dropout
+        #     bidirectional:默认为False
+        
 
-
+        #nn.LSTM:一次构造完若干层的LSTM
+        #nn.LSTMCell:是组成LSTM整个序列计算过程的基本组成单元，想要完整的进行一个序列的训练还要自己编写传播函数把cell间的输入输出连接起来
+        #            只有三个参数：input_size, hidden_size, bias
+        self.encoder = nn.LSTM(input_size = embed_size, hidden_size = hidden_size, bidirectional = True, dropout = self.dropout_rate)
+        # decoder的输入是神经元输和h目标语言句子的嵌入向量，所以输入大小为embed_size + hidden_size
+        self.decoder = nn.LSTMCell(embed_size + hidden_size, hidden_size)
+        self.h_projection = nn.Linear(2 * hidden_size, hidden_size, bias=False)
+        self.c_projection = nn.Linear(2 * hidden_size, hidden_size, bias=False)
+        self.att_projection = nn.Linear(2 * hidden_size, hidden_size, bias=False)
+        self.combined_output_projection = nn.Linear(3 * hidden_size, hidden_size, bias=False)
+        self.target_vocab_projection = nn.Linear(hidden_size, len(self.vocab.tgt), bias=False)
+        self.dropout = nn.Dropout(p=self.dropout_rate)
 
         ### END YOUR CODE
 
@@ -168,6 +188,10 @@ class NMT(nn.Module):
         ###         https://pytorch.org/docs/stable/torch.html#torch.cat
         ###     Tensor Permute:
         ###         https://pytorch.org/docs/stable/tensors.html#torch.Tensor.permute
+
+        X = self.model_embeddings.source(source_padded)
+        assert X.shape == (source_padded.shape[0], source_padded.shape[1], self.embed_size)
+        X = pack_padded_sequence(X, source_lengths)
 
 
 
