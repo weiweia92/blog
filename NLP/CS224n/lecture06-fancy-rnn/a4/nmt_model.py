@@ -90,7 +90,7 @@ class NMT(nn.Module):
         #nn.LSTM:一次构造完若干层的LSTM
         #nn.LSTMCell:是组成LSTM整个序列计算过程的基本组成单元，想要完整的进行一个序列的训练还要自己编写传播函数把cell间的输入输出连接起来
         #            只有三个参数：input_size, hidden_size, bias
-        self.encoder = nn.LSTM(input_size = embed_size, hidden_size = hidden_size, bidirectional = True, dropout = self.dropout_rate)
+        self.encoder = nn.LSTM(input_size = embed_size, hidden_size = hidden_size, bidirectional = True)
         # decoder的输入是神经元输和h目标语言句子的嵌入向量，所以输入大小为embed_size + hidden_size
         self.decoder = nn.LSTMCell(embed_size + hidden_size, hidden_size)
         self.h_projection = nn.Linear(2 * hidden_size, hidden_size, bias=False)
@@ -190,14 +190,22 @@ class NMT(nn.Module):
         ###         https://pytorch.org/docs/stable/tensors.html#torch.Tensor.permute
 
         X = self.model_embeddings.source(source_padded)
-        assert X.shape == (source_padded.shape[0], source_padded.shape[1], self.embed_size)
-        X = pack_padded_sequence(X, source_lengths)
+        packedX = nn.utils.rnn.pack_padded_sequence(X, source_lengths)
 
-
-
-
+        # enc_hiddens就是一个序列的h_i^enc, shape是(src_len, b, h*2)
+        # last_hidden的shape是(2, b, h):正向LSTM的最后一个隐状态和反向LSTM的最后一个隐状态
+        # last_cell的shape是(2, b, h):与last_hidden相似
+        enc_hiddens, (last_hidden, last_cell) = self.encoder(packedX)
+        enc_hiddens, _ = nn.utils.rnn.pad_packed_sequence(enc_hiddens)
+        enc_hiddens = enc_hiddens.permute(1, 0, 2)   #将tensor维度换位
+        last_hidden = torch.cat((last_hidden[0], last_hidden[1]), 1)
+        init_decoder_hidden = self.h_projection(last_hidden)
+        last_cell = torch.cat((last_cell[0], last_cell[1]), 1)
+        init_decoder_cell = self.c_projection(last_cell)
+        dec_init_state = (init_decoder_hidden, init_decoder_cell)
 
         ### END YOUR CODE
+
 
         return enc_hiddens, dec_init_state
 
@@ -217,7 +225,7 @@ class NMT(nn.Module):
         @returns combined_outputs (Tensor): combined output tensor  (tgt_len, b,  h), where
                                         tgt_len = maximum target sentence length, b = batch_size,  h = hidden size
         """
-        # Chop of the <END> token for max length sentences.
+        # Chop(截断) of the <END> token for max length sentences.
         target_padded = target_padded[:-1]
 
         # Initialize the decoder state (hidden and cell)
