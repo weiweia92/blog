@@ -1,8 +1,8 @@
 ![](https://github.com/weiweia92/blog/blob/main/NLP/pic/Screen%20Shot%202021-07-20%20at%206.00.19%20PM.png)
 
 `(g)` 1. Masks prevent(阻止) the decoder to output(输出 v.) <pad> padding tokens which are present in nearly every batch. Padding tokens are an artifact of the speed-up that comes from processing the data in batches (padding是为了可以批量处理,批量处理是为了加速), it's undesirable to output them because prediction ends with a special termination token. Pre-softmax value of negative infinity sets their probability to zero.         
-&emsp;&emsp;&nbsp;&nbsp; 2. attention score/distributions 计算的是decoder中某一time step上的target word 对 encoder 中所有 source word 的注意力概率，而 pad token 只用于 mini-batch，并没有任何语言意义，target word 无需为其分散注意力，所以需要使用 masks 过滤掉 pad token.    
-  
+&emsp;&emsp;&nbsp;&nbsp;2.Attention score/distributions calculates the attention probability of the target word at a certain time step in the decoder to all the source words in the encoder, while the pad token is only used for mini-batch and has no linguistic meaning. The target word does not need to be distracted(分心) attention, so you need to use masks to filter out(过滤) the pad token.
+ 
 `(j)` Advantage:dot product attention doesn't contain any learnable parameters, therefore, it is the simplest and computationally least expensive variant.     
 &emsp;&emsp;&nbsp;&nbsp;Disadvantage: it's not very expression(表现力) and only measures the degree of alignment of the decoder and encoder hidden states. Therefore force the decoder and encoder having very similar embedding spaces. It can be viewed as a form of regularization that may hurt performance for certain language pairs that are very dissimilar.       
   
