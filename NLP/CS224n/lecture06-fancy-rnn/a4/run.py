@@ -48,7 +48,7 @@ import time
 
 
 from docopt import docopt
-# from nltk.translate.bleu_score import corpus_bleu, sentence_bleu, SmoothingFunction
+from nltk.translate.bleu_score import corpus_bleu, sentence_bleu, SmoothingFunction
 import sacrebleu
 from nmt_model import Hypothesis, NMT
 import numpy as np

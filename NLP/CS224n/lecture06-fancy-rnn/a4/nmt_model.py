@@ -12,7 +12,6 @@ from collections import namedtuple
 import sys
 from typing import List, Tuple, Dict, Set, Union
 import torch
-from torch._C import SourceRange
 import torch.nn as nn
 import torch.nn.utils
 import torch.nn.functional as F
@@ -90,7 +89,7 @@ class NMT(nn.Module):
         #nn.LSTM:一次构造完若干层的LSTM
         #nn.LSTMCell:是组成LSTM整个序列计算过程的基本组成单元，想要完整的进行一个序列的训练还要自己编写传播函数把cell间的输入输出连接起来
         #            只有三个参数：input_size, hidden_size, bias
-        self.encoder = nn.LSTM(input_size = embed_size, hidden_size = hidden_size, bidirectional = True)
+        self.encoder = nn.LSTM(input_size = embed_size, hidden_size = hidden_size, bidirectional = True) # bidirectional LSTM
         # decoder的输入是神经元输和h目标语言句子的嵌入向量，所以输入大小为embed_size + hidden_size
         self.decoder = nn.LSTMCell(embed_size + hidden_size, hidden_size)
         self.h_projection = nn.Linear(2 * hidden_size, hidden_size, bias=False)
@@ -193,7 +192,10 @@ class NMT(nn.Module):
         packedX = nn.utils.rnn.pack_padded_sequence(X, source_lengths)
 
         # enc_hiddens就是一个序列的h_i^enc, shape是(src_len, b, h*2)
-        # last_hidden的shape是(2, b, h):正向LSTM的最后一个隐状态和反向LSTM的最后一个隐状态
+
+        # last_hidden的shape是(2, b, h): last_hidden[0]是h_m^{enc},last_hidden[1]是h_1^{enc},总之一个是正向LSTM的最后一个隐状态
+        # 一个是反向LSTM的最后一个隐状态
+
         # last_cell的shape是(2, b, h):与last_hidden相似
         enc_hiddens, (last_hidden, last_cell) = self.encoder(packedX)
         enc_hiddens, _ = nn.utils.rnn.pad_packed_sequence(enc_hiddens)
@@ -205,7 +207,6 @@ class NMT(nn.Module):
         dec_init_state = (init_decoder_hidden, init_decoder_cell)
 
         ### END YOUR CODE
-
 
         return enc_hiddens, dec_init_state
 
@@ -231,8 +232,8 @@ class NMT(nn.Module):
         # Initialize the decoder state (hidden and cell)
         dec_state = dec_init_state
 
-        # Initialize previous combined output vector o_{t-1} as zero
         batch_size = enc_hiddens.size(0)
+        # Initialize previous combined output vector o_{t-1} as zero
         o_prev = torch.zeros(batch_size, self.hidden_size, device=self.device)
 
         # Initialize a list we will use to collect the combined output o_t on each step
@@ -274,10 +275,14 @@ class NMT(nn.Module):
         ###     Tensor Stacking:
         ###         https://pytorch.org/docs/stable/torch.html#torch.stack
 
-
-
-
-
+        enc_hiddens_proj = self.att_projection(enc_hiddens)
+        Y = self.model_embeddings.target(target_padded)
+        for Y_t in torch.split(Y, 1):  #预测阶段,每个时刻都用真实的译文的词的词向量
+            Y_t = torch.squeeze(Y_t, dim=0)
+            Ybar_t = torch.cat((Y_t, o_prev), 1)
+            dec_state, o_prev, _ = self.step(Ybar_t, dec_state, enc_hiddens, enc_hiddens_proj, enc_masks)
+            combined_outputs.append(o_prev)
+        combined_outputs = torch.stack(combined_outputs, 0)
 
         ### END YOUR CODE
 
@@ -289,7 +294,7 @@ class NMT(nn.Module):
             enc_hiddens: torch.Tensor,
             enc_hiddens_proj: torch.Tensor,
             enc_masks: torch.Tensor) -> Tuple[Tuple, torch.Tensor, torch.Tensor]:
-        """ Compute one forward step of the LSTM decoder, including the attention computation.
+        """ Compute one forward step(前一步) of the LSTM decoder, including the attention computation.
 
         @param Ybar_t (Tensor): Concatenated Tensor of [Y_t o_prev], with shape (b, e + h). The input for the decoder,
                                 where b = batch size, e = embedding size, h = hidden size.
@@ -336,8 +341,10 @@ class NMT(nn.Module):
         ###     Tensor Squeeze:
         ###         https://pytorch.org/docs/stable/torch.html#torch.squeeze
 
-
-
+        dec_state = self.decoder(Ybar_t, dec_state)
+        dec_hidden, dec_cell = dec_state  #dec_hidden:(h,1)
+        e_t = torch.bmm(torch.unsqueeze(dec_hidden, 1), enc_hiddens_proj.permute(0, 2, 1))
+        e_t = torch.squeeze(e_t, 1)
 
         ### END YOUR CODE
 
@@ -372,11 +379,12 @@ class NMT(nn.Module):
         ###         https://pytorch.org/docs/stable/torch.html#torch.cat
         ###     Tanh:
         ###         https://pytorch.org/docs/stable/torch.html#torch.tanh
-
-
-
-
-
+        alpha_t = nn.Softmax(dim=1)(e_t)
+        a_t = torch.bmm(torch.unsqueeze(alpha_t, 1), enc_hiddens)
+        a_t = torch.squeeze(a_t, 1)
+        U_t = torch.cat((a_t, dec_hidden), 1)  #(h, 3h)
+        V_t = self.combined_output_projection(U_t)
+        O_t = self.dropout(torch.tanh(V_t))
         ### END YOUR CODE
 
         combined_output = O_t
