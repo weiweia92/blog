@@ -1,1 +1,11 @@
 ![](https://github.com/weiweia92/blog/blob/main/NLP/pic/Screen%20Shot%202021-07-20%20at%206.00.19%20PM.png)
+
+`(g)` 1. Masks prevent(阻止) the decoder to output(输出 v.) <pad> padding tokens which are present in nearly every batch. Padding tokens are an artifact of the speed-up that comes from processing the data in batches (padding是为了可以批量处理,批量处理是为了加速), it's undesirable to output them because prediction ends with a special termination token. Pre-softmax value of negative infinity sets their probability to zero.         
+&emsp;&emsp;&nbsp;&nbsp; 2. attention score/distributions 计算的是decoder中某一time step上的target word 对 encoder 中所有 source word 的注意力概率，而 pad token 只用于 mini-batch，并没有任何语言意义，target word 无需为其分散注意力，所以需要使用 masks 过滤掉 pad token.    
+  
+`(j)` Advantage:dot product attention doesn't contain any learnable parameters, therefore, it is the simplest and computationally least expensive variant.     
+&emsp;&emsp;&nbsp;&nbsp;Disadvantage: it's not very expression(表现力) and only measures the degree of alignment of the decoder and encoder hidden states. Therefore force the decoder and encoder having very similar embedding spaces. It can be viewed as a form of regularization that may hurt performance for certain language pairs that are very dissimilar.       
+  
+&emsp;&emsp;&nbsp;&nbsp;Multiplicative attention is more expressive and allows the encoder and decoder to develop linearly dependent(线性相关) word vectore representations. Since the weight matrix doesn't have to be square(正方形) and embedding spaces can have different dimensions. Faster and more memory-saving than additive attention but there's additional computational cost compared to the dot product variant.     
+  
+&emsp;&emsp;&nbsp;&nbsp;Additive attention gives the decoder and encoder the most freedom to develop independent embedding spaces. The mapping has more degrees of freedom and allows for an affine(仿射) non-linear mapping between the encoder and decoder space. Additive attention requires the most computational operations of the three options. Computational cost increase in this case may be substantial(重大的) because the number of attention operations grows approximately as ![](https://latex.codecogs.com/png.image?\dpi{110}%20O(n^2)). n is the mean input and output sequence length.
