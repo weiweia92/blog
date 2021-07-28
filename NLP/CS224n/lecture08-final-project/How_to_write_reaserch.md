@@ -219,7 +219,14 @@ The learning rate is perhaps the most important hyperparameter. If you have time
 capacity of the model in a more complicated way than other hyperparameters—the effective capacity of the model is highest when the learning rate is *correct* for 
 the optimization problem, not when the learning rate is especially large or especially small. The learning rate has a U-shaped curve for training error,illustrated 
 in ﬁgure
-![]()
+![](https://github.com/weiweia92/blog/blob/main/NLP/pic/Screen%20Shot%202021-07-28%20at%204.19.28%20PM.png)    
+When the learning rate is too large, gradient descent can inadvertently(无意识地) increase rather than decrease the training error. In the idealized quadratic case, this occurs if the learning rate is at least twice as large as itsoptimal value (LeCun et al., 1998a). When the learning rate is too small, trainingis not only slower but may become permanently(永久地) stuck with a high training error. This effect is poorly understood (it would not happen for a convex loss function).  
+
+Tuning the parameters other than the learning rate requires monitoring both training and test error to diagnose whether your model is overﬁtting or underﬁtting,then adjusting its capacity appropriately. 
+
+If your error on the training set is higher than your target error rate, you have no choice but to increase capacity. If you are not using regularization and you are conﬁdent that your optimization algorithm is performing correctly, then you must add more layers to your network or add more hidden units. Unfortunately, this increases the computational costs associated with the model.
+
+
 
 
 
