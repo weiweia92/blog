@@ -72,10 +72,7 @@ a feedforward network designed to detect a disease outputs ![](https://latex.cod
 probability that a person whose medical results are described by features ![](https://latex.codecogs.com/png.image?\dpi{110}%20x) has the disease. 
 We choose to report a detection whenever this score exceeds some threshold. By varying the threshold, we can trade precision for recall. In many 
 cases, we wish to summarize the performance of the classifier with a single number rather than a curve. To do so, we can convert precision 
-![](https://latex.codecogs.com/png.image?\dpi{110}%20p) and recall ![](https://latex.codecogs.com/png.image?\dpi{110}%20r) into an F-score given by 
-
-![](https://latex.codecogs.com/png.image?\dpi{110}%20F%20=%20\frac{2pr}{p+r})
-
+![](https://latex.codecogs.com/png.image?\dpi{110}%20p) and recall ![](https://latex.codecogs.com/png.image?\dpi{110}%20r) into an F-score given by ![](https://latex.codecogs.com/png.image?\dpi{110}%20F%20=%20\frac{2pr}{p+r}).        
 Another option is to report the total area(面积，区域) lying beneath(下方) the PR curve.
 
 In some applications, it is possible for the machine learning system to refuse to make a decision. This is useful when the machine learning algorithm 
@@ -218,8 +215,9 @@ In other words,some hyperparameters can only subtract capacity.
 The learning rate is perhaps the most important hyperparameter. If you have time to tune only one hyperparameter, tune the learning rate. It controls the effective 
 capacity of the model in a more complicated way than other hyperparameters—the effective capacity of the model is highest when the learning rate is *correct* for 
 the optimization problem, not when the learning rate is especially large or especially small. The learning rate has a U-shaped curve for training error,illustrated 
-in ﬁgure
-![](https://github.com/weiweia92/blog/blob/main/NLP/pic/Screen%20Shot%202021-07-28%20at%204.27.34%20PM.png)   
+in ﬁgure.     
+![](https://github.com/weiweia92/blog/blob/main/NLP/pic/Screen%20Shot%202021-07-28%20at%204.27.34%20PM.png)    
+
 When the learning rate is too large, gradient descent can inadvertently(无意识地) increase rather than decrease the training error. In the idealized quadratic case, this occurs if the learning rate is at least twice as large as itsoptimal value (LeCun et al., 1998a). When the learning rate is too small, trainingis not only slower but may become permanently(永久地) stuck with a high training error. This effect is poorly understood (it would not happen for a convex loss function).  
 
 Tuning the parameters other than the learning rate requires monitoring both training and test error to diagnose whether your model is overﬁtting or underﬁtting,then adjusting its capacity appropriately. 
@@ -228,7 +226,20 @@ If your error on the training set is higher than your target error rate, you hav
 
 If your error on the test set is higher than your target error rate, you can now take two kinds of actions. The test error is the sum of the training error and the gap between training and test error. The optimal test error is found by trading off these quantities. Neural networks typically perform best when the training error is very low (and thus, when capacity is high) and the test error is primarily driven by the gap between training and test error. Your goal is to reduce this gap without increasing training error faster than the gap decreases. To reduce the gap,change regularization hyperparameters to reduce effective model capacity,  such asby adding dropout or weight decay. Usually the best performance comes from a large model that is regularized well, for example, by using dropout. 
 
-Most hyperparameters can be set by reasoning about whether they increase or decrease model capacity. Some examples are included in table 11.1.  
+Most hyperparameters can be set by reasoning about whether they increase or decrease model capacity. Some examples are included in table 11.1.    
+![](https://github.com/weiweia92/blog/blob/main/NLP/pic/Screen%20Shot%202021-07-28%20at%204.35.05%20PM.png)
+
+While manually tuning hyperparameters, do not lose sight of your end goal: good performance on the test set. Adding regularization is only one way to achieve this goal. As long as you have low training error, you can always reduce generalization error by collecting more training data. The brute force way to practically guarantee success is to continually increase model capacity and training set size until the task is solved. This approach does of course increase the computational cost of training and inference, so it is only feasible given appropriate resources. In principle, this approach could fail due to optimization difficulties, but for many problems optimization does not seem to be a significant barrier, provided that the model is chosen appropriately.
+
+### 11.4.2 Automatic Hyperparameter Optimization Algorithms
+
+The ideal learning algorithm just takes a dataset and outputs a function, without requiring hand tuning of hyperparameters. The popularity of several learning algorithms such as logistic regression and SVMs stems in part from their ability to perform well with only one or two tuned hyperparameters. Neural networks can sometimes perform well with only a small number of tuned hyperparameters,  but often beneﬁt significantly from tuning of forty(40次) or more. Manual hyperparameter tuning can work very well when the user has a good starting point, such as one determined by others having worked on the same type of application and architecture(由其他人在相同类型的应用程序或架构上工作过), or when the user has months or years of experience in exploring hyperparameter values for neural networks applied to similar tasks. For many applications, however, these starting points are not available. In these cases,automated algorithms can ﬁnd useful values of the hyperparameters.  
+
+If we think about the way in which the user of a learning algorithm searches forgood values of the hyperparameters, we realize that an optimization is taking place(发生): we are trying to ﬁnd a value of the hyperparameters that optimizes an objective function, such as validation error, sometimes under constraints (such as a budget for training time, memory or recognition time). It is therefore possible, in principle,to develop hyperparameter optimization algorithms that wrap a learning algorithm and choose its hyperparameters,  thus hiding the hyperparameters of the learning algorithm from the user. Unfortunately, hyperparameter optimization algorithms often have their own hyperparameters, such as the range of values that should be explored for each of the learning algorithm’s hyperparameters. These secondary hyperparameters are usually easier to choose, however,in the sense that acceptable performance may be achieved on a wide range of tasks using the same secondary hyperparameters for all tasks.  
+
+### 11.4.3 Grid Search
+
+When there are three or fewer hyperparameters, the common practice is to perform **grid search**. For each hyperparameter, the user selects a small finite set of values to explore. The grid search algorithm then trains a model for every joint specification of hyperparameter values in the Cartesian product(笛卡尔积) of the set of values for each individual hyperparameter. The experiment that yields the best validationset error is then chosen as having found the best hyperparameters. See the left of figure 11.2 for an illustration of a grid of hyperparameter values.  
 ![]()
 
 
