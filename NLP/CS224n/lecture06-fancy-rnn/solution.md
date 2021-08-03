@@ -1,4 +1,4 @@
-![](https://github.com/weiweia92/blog/blob/main/NLP/pic/Screen%20Shot%202021-07-20%20at%206.00.19%20PM.png)
+cd![](https://github.com/weiweia92/blog/blob/main/NLP/pic/Screen%20Shot%202021-07-20%20at%206.00.19%20PM.png)
 
 `(g)` 1. Masks prevent(阻止) the decoder to output(输出 v.) <pad> padding tokens which are present in nearly every batch. Padding tokens are an artifact of the speed-up that comes from processing the data in batches (padding是为了可以批量处理,批量处理是为了加速), it's undesirable to output them because prediction ends with a special termination token. Pre-softmax value of negative infinity sets their probability to zero.         
 &emsp;&emsp;&nbsp;&nbsp;2.Attention score/distributions calculates the attention probability of the target word at a certain time step in the decoder to all the source words in the encoder, while the pad token is only used for mini-batch and has no linguistic meaning. The target word does not need to be distracted(分心) attention, so you need to use masks to filter out(过滤) the pad token.
