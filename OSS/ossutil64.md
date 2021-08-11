@@ -190,12 +190,69 @@
 ./ossutil64 du oss://examplebucket/test --all-versions --block-size KB
 ```
 
+### 5. ls
 
+#### 列举bucket
 
+参数:    
+-s: 列举结果仅返回bucket名称     
+--limited-num: 设定返回结果的最大个数        
+--marker: 列举名称字母序排在market之后的bucket   
 
+列举所有bucket
 
+```
+./ossutil64 ls 
+```
 
+or 
 
+```
+./ossutil64 ls oss://
+```
+
+以精简模式列举所有bucket
+
+```
+./ossutil64 ls -s
+```
+
+列举字母序排在指定marker为examplebucketA之后的2个Bucket
+
+```
+./ossutil64 ls oss:// --limited-num=2 -s --marker examplebucketA
+```
+
+#### 列举object
+
+参数:     
+prefix:目标Object前缀。当您列举目标Bucket中指定前缀的Object时添加此项。   
+-s:列举结果仅返回Object的名称.     
+-d:仅列举Object和子目录，忽略子目录下的Object。   
+--limited-num:设定返回结果的最大个数.    
+--marker:列举名称字母排序在marker之后的Object。    
+--include:列举符合指定条件的Object。例如*.jpg表示列举所有JPG格式的文件.   
+--exclude:列举不符合指定条件的Object。例如*.txt表示列举所有非txt格式的文件。    
+--version-id-marker:列举Version ID字母排序在marker之后的Object版本。仅当Bucket开启版本控制后可用。     
+--all-versions:列举Object的所有版本，仅当Bucket开启版本控制后可用。  
+
+列举examplebucket内所有Object
+
+```
+./ossutil64 ls oss://examplebucket
+```
+
+列举examplebucket内前缀为example的Object
+
+```
+./ossutil64 ls oss://examplebucket/example
+```
+
+列举examplebucket内所有后缀名为.mp4的文件
+
+```
+./ossutil64 ls oss://examplebucket --include *.mp4
+```
 
 
 
