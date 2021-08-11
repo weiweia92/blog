@@ -39,13 +39,13 @@
 ./ossutil cp examplefile.txt oss://examplebucket/desfolder/
 ```
 
-** 仅上传文件夹内的文件    **
+**仅上传文件夹内的文件**
 
 ```
 ./ossutil cp -r localfolder/ oss://examplebucket/desfolder/
 ```
  
-**上传文件夹及文件夹内的文件     **
+**上传文件夹及文件夹内的文件**
 
 ```
 ./ossutil cp -r localfolder/ oss://examplebucket/desfolder/localfolder/
@@ -59,7 +59,7 @@
 ./ossutil cp -r localfolder/ oss://examplebucket/desfolder/ -u
 ```
 
-**仅上传当前目录下的文件，忽略子目录      **
+**仅上传当前目录下的文件，忽略子目录**
 
 ```
 ./ossutil cp localfolder/ oss://examplebucket/desfolder/ --only-current-dir -r
@@ -96,13 +96,13 @@
 ./ossutil cp -r oss://examplebucket/desfolder/  localfolder/  --update                           
 ```
 
-**仅下载当前目录下的文件，忽略子目录     **
+**仅下载当前目录下的文件，忽略子目录**
 
 ```
 ./ossutil cp oss://examplebucket/desfolder/ localfolder/ --only-current-dir -r
 ```
 
-**范围下载     **         
+**范围下载**         
 
 下载文件时，可以通过 --range选项指定下载范围。例如将 examplefile.txt的第10到第20个字符作为一个文件下载到本地      
 
@@ -111,7 +111,7 @@
 ```
 
 
-**批量下载符合指定条件的文件    **
+**批量下载符合指定条件的文件**
 
 * 下载所有文件格式不为jpg的文件     
   ```
@@ -130,7 +130,7 @@
 ./ossutil cp oss://examplebucket1/examplefile.txt oss://examplebucket1/srcfolder2/                                 
 ```
 
-**拷贝文件夹    **
+**拷贝文件夹**
 
 ```
 ./ossutil cp oss://examplebucket1/srcfolder1/ oss://examplebucket2/desfolder/ -r                                   
@@ -143,13 +143,13 @@
 ./ossutil cp oss://examplebucket1/srcfolder1/ oss://examplebucket2/path2/ -r --update
 ```
 
-**重命名   **
+**重命名**
 
 ```
 ./ossutil cp oss://examplebucket1/examplefile.txt oss://examplebucket1/example.txt                        
 ```
 
-**仅拷贝当前目录下文件，忽略子目录    **
+**仅拷贝当前目录下文件，忽略子目录**
 
 ```
 ./ossutil cp oss://examplebucket1/srcfolder1/ oss://examplebucket1/srcfolder2/ --only-current-dir -r
@@ -157,12 +157,12 @@
 
 ### 3. create-symlink
 
-**为目标存储空间examplebucket根目录下的test.jpg文件创建名为example.jpg的软链接文件，并将软链接文件保存至该Bucket下的destfolder目录。    **
+**为目标存储空间examplebucket根目录下的test.jpg文件创建名为example.jpg的软链接文件，并将软链接文件保存至该Bucket下的destfolder目录**
 
 ```
 ./ossutil64 create-symlink  oss://examplebucket/destfolder/example.jpg  oss://examplebucket/test.jpg 
 ```
-**例如您需要为另一个阿里云账号下，华东2（上海）地域下目标存储空间testbucket下的exampleobject.png文件创建名为testobject.png的软链接.     **
+**例如您需要为另一个阿里云账号下，华东2（上海）地域下目标存储空间testbucket下的exampleobject.png文件创建名为testobject.png的软链接**
 
 ```
 ./ossutil64 create-symlink  oss://testbucket/testobject.png  oss://testbucket/exampleobject.png -e oss-cn-shanghai.aliyuncs.com -i LTAI4Fw2NbDUCV8zYUzA****  -k 67DLVBkH7EamOjy2W5RVAHUY9H****
@@ -172,7 +172,7 @@
 
 获取指定bucket,文件目录下包含的所有object的大小。     
 
-**命令用于查询examplebucket内所有版本Object的大小.   **
+**命令用于查询examplebucket内所有版本Object的大小.**
 
 ```
 ./ossutil64 du oss://examplebucket --all-versions
