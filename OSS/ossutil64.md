@@ -266,6 +266,62 @@ prefix:目标Object前缀。当您列举目标Bucket中指定前缀的Object时�
 ./ossutil64 ls oss://examplebucket --include *.mp4
 ```
 
+仅列举examplebucket根目录下Object和子目录 
+
+```
+./ossutil64 ls oss://examplebucket -d
+```
+
+列举examplebucket内所有Object的所有版本
+
+```
+./ossutil64 ls oss://examplebucket --all-versions
+```
+
+列举examplebucket根目录下example.txt的所有版本
+
+```
+./ossutil64 ls oss://examplebucket/example.txt --all-versions
+```
+
+### 6. mb(创建存储空间)
+
+```
+./ossutil64 mb oss://bucketname [--acl <value>][--storage-class <value>][--redundancy-type <value>]
+```
+
+参数:     
+
+--acl:private(default); public-read; public-read-write      
+
+--storage-class:Standard(default); IA; Archive; ColdArchive       
+
+--redundancy-type:LRS; ZRS
+
+### 7.mkdir(创建目录)
+
+创建单级目录
+
+```
+./ossutil mkdir oss://examplebucket/dir/
+```
+
+创建多级目录
+
+```
+./ossutil mkdir oss://examplebucket/Photo/2021/ 
+```
+如果误删除了2021/目录，且上一级目录Photo/下文件个数为0，则Photo/目录也会被自动移除。
+
+
+
+
+
+
+
+
+
+
 
 
 
