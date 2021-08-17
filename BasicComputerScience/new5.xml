@@ -1,0 +1,10 @@
+<metadata>
+<food /><food>
+    <item name="breakfast">Paper Dosa</item>
+    <price>$2.7</price>
+    <description updated="yes">
+    Plain paper dosa with chutney
+    Description has been added</description>
+    <calories>700</calories>
+</food>
+</metadata>

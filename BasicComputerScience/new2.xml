@@ -1,0 +1,18 @@
+<metadata>
+<food>
+    <item name="breakfast">Idly</item>
+    <price>$2.5</price>
+    <description updated="yes">
+    Two idly's with chutney
+    Description has been added</description>
+    <calories>553</calories>
+<speciality>South Indian Specia</speciality></food>
+<food>
+    <item name="breakfast">Paper Dosa</item>
+    <price>$2.7</price>
+    <description updated="yes">
+    Plain paper dosa with chutney
+    Description has been added</description>
+    <calories>700</calories>
+</food>
+</metadata>
