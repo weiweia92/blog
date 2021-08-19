@@ -20,6 +20,7 @@ ssh-keygen -t rsa -C "weiweia92@163.com"  #生成ssh key
 ```
 ### 2.WorkSpace->Stage->Local Repo->Remote Repo
 
+![](https://github.com/weiweia92/blog/blob/main/BasicComputerScience/pic/1615359094257-aa9f97e9-c080-4950-bcd8-c6b2e2c926ce.png)
 工作区(workspace)：工作区就是你克隆项目到本地后，项目所在的文件夹目录。
 
 暂存区(Index/stage)：用于存储工作区中添加上来的变更（新增、修改、删除）的文件的地方。操作时，使用git add .会将本地所有新增、变更、删除过的文件的情况存入暂存区中。
@@ -59,7 +60,7 @@ git reflog -n #指定显示条数
 git reset --hard 45a992bc53bd4 #45a992bc53bd4：<commit ID> 将本地仓库回滚到指定的版本
 ```
 
-![]()
+![](https://github.com/weiweia92/blog/blob/main/BasicComputerScience/pic/1615280056033-d91d8410-5cc8-4b04-92f0-3407141797e8.png)
 
 HEAD值越小，表示版本越新，越大表示版本生成时间越久。    
 在上面图中，我们发现HEAD值的展示形式为HEAD@{0}、 HEAD@{1}、HEAD@{2}...同样HEAD值的数字越小，表示版本越新，数字越大表示版本越旧。     
@@ -80,18 +81,18 @@ git log #查看commit的历史记录（当前分支）
 git log -p <file>  #查看指定文件的提交历史
 git blame <file>  #以列表方式查看指定文件的提交历史
 ```
-![]()
+![](https://github.com/weiweia92/blog/blob/main/BasicComputerScience/pic/1609157251147-5ab7db61-30db-4e23-a141-72323bd193f0.png)
 ```
 git log --oneline #查看当前所在分支/对应远程分支 每次提交的版本号
 ```
-![]()   
+![](https://github.com/weiweia92/blog/blob/main/BasicComputerScience/pic/1609157407912-84d94229-75cb-45f2-aa54-908edd9e72e4.png)   
 
 ### 2.BRANCH
 
 #### 2.1.local branch
 
 branch是用来将特性开发绝缘开来的。在你创建仓库时，master是默认的branch，在其他分支开发，完成后再将它们合并到主分支上。    
-![]()    
+![](https://github.com/weiweia92/blog/blob/main/BasicComputerScience/pic/1609148476778-92ba099b-b880-4536-8124-7a37abf78ded.png)    
 ```
 git branch  #查看本地分支
 git branch -r  #查看远程分支
@@ -135,7 +136,7 @@ git push origin --delete <origin_branch_name>
 给gitlab的各位开发设置权限是很重要的，不然他们就可能会偷偷把执行分支合并甚至git pull来破坏线上环境。
 project--setting--members    
 
-![]()     
+![](https://github.com/weiweia92/blog/blob/main/BasicComputerScience/pic/1609147666699-82157a9a-c1f5-45fc-967a-c9198f76e5b3.png)     
 Master,Developer,Reporter,Reporter只有读权限，可以创建代码片段，一般来说给测试人员，Guest只能提交问题和评论。   
 ```
 #拉取远程pre_merge分支到本地pre_merge(自己命名)的分支
