@@ -109,7 +109,7 @@ git tag <tagname> #基于最新提交创建标签
 git tag -d <tagname> #删除标签
 
 #将本地建立的local branch与远程的develop进行关联
-git branch --set-upstream-to origin/develop    #默认与本地所在分支进行关联
+git checkout -b localBranch origin/removeBranch    #默认与本地所在分支进行关联
 
 #要将本地更改提交到远程分支上之前需要pull一下远程分支
 git pull
