@@ -102,12 +102,14 @@ git push origin --delete <local_branch_name> #将删除的本地分支同步到�
 git checkout <branch/tag>  #切换分支(本地)或标签
 #创建一个branch_name分支并切换过去，除非你将该分支推送到远端仓库，不然该分支就是不为他人所见的
 git checkout -b <branch_name> 
+#删除本地分支
+git branch -d localBranchName
 git tag #列出所有本地标签
 git tag <tagname> #基于最新提交创建标签
 git tag -d <tagname> #删除标签
 
-#将本地建立的pre_merge_model与远程的pre_merge_model进行关联
-git branch --set-upstream-to=origin/pre_merge_model pre_merge_model  
+#将本地建立的local branch与远程的develop进行关联
+git branch --set-upstream-to origin/develop    #默认与本地所在分支进行关联
 
 #要将本地更改提交到远程分支上之前需要pull一下远程分支
 git pull
