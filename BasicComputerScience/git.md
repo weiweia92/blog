@@ -1,13 +1,24 @@
-## Git
+# Git
 
 Git-version control system to locally track changes in your project/folder and push & pull changes from remote repositories like GitHub, BitBucket,GitLab
-
-## GitLab,BitBucket,GitHub
 
 Services that allow to host your project on a remote repo & have additional features to help in SDLC(software development lifecycle) and CI(continuous integration),CD(continuous delivery).
 eg: Managing  Sharing   Wiki  Bug tracking CI & CD
 
-### 1.GIT设置
+## Getting Started
+
+### Setting up a reposity
+
+If you used  `git clone` in the previous "Initializing a new Repository" section to set up your local repository, your repository is **already** configured for remote collaboration(协作).
+
+`git clone` will automatically configure your repo with a remote pointed to the Git URL you cloned it from. This means that once you make changes to a file and commit them, you can `git push` those changes to the remote repository.  
+
+If you used `git init` to make a fresh repo, you'll have no remote repo to push changes to. A common pattern when initializing a new repo is to go to a hosted(主办) Git service like Bitbucket and create a repo there. The service will provide a Git URL that you can then add to your local Git repository and git push to the hosted repo. Once you have created a remote repo with your service of choice you will need to update your local repo with a **mapping**. We discuss this process in the Configuration & Set Up guide below.
+
+### Configuration & set up:git config
+
+要参与任何一个 Git 项目的协作,必须要了解该如何管理远程仓库.远程仓库是指托管在网络上的项目仓库,可能会有好多个,其中有些你只能读,另外有些可以写.同他人协作开发某 个项目时,需要管理这些远程仓库,以便推送或拉取数据,分享各自的工作进展.管理远程仓库的工作,包括添加远程库,移除废弃的远程库,管理各式远程库分 支,定义是否跟踪这些分支,等等
+
 
 ```
 git config --global user.name "weiweia92"
@@ -32,7 +43,8 @@ ssh-keygen -t rsa -C "weiweia92@163.com"  #生成ssh key
 操作时，使用git push origin 分支名称，将本次仓库存储的当前分支的修改推送至远程仓库中的对应分支中。
 
 ```
-git init #在本地的当前目录初始化git仓库
+#在本地的当前目录初始化git仓库Executing this command will create a new `.git` subdirectory in your current working directory. This will also create a new main branch. 
+git init 
 git diff #显示WorkSpace和Stage中的状态差异
 git add <file> / git add .  #从WorkSpace保存到Stage,add后的文件才会被git跟踪
 git mv <old> <new> #文件改名
