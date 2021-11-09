@@ -1,3 +1,15 @@
+### Install ossutil
+
+* macOS 系统安装
+
+`curl -o ossutilmac64 http://gosspublic.alicdn.com/ossutil/1.7.7/ossutilmac64`
+
+`chmod 755 ossutilmac64`
+
+`./ossutilmac64 config`
+
+根据提示设置endpoint, AccessId, AccessKey
+
 ### 1. cat(输出文件内容)
 
 将未开启版本控制的目标存储空间examplebucket内名为test.txt的文件内容输出到屏幕。   
@@ -167,8 +179,15 @@
 ```
 ./ossutil64 create-symlink  oss://testbucket/testobject.png  oss://testbucket/exampleobject.png -e oss-cn-shanghai.aliyuncs.com -i LTAI4Fw2NbDUCV8zYUzA****  -k 67DLVBkH7EamOjy2W5RVAHUY9H****
 ```
+### 4. read-symlink
 
-### 4. du
+read-symlink命令用于读取软链接文件的描述信息，包括软链接文件的ETag值、最后更新时间等。此操作要求用户对软链接文件有读权限。
+
+以下示例用于读取目标存储空间examplebucket下软链接文件test.jpg的描述信息。
+
+`./ossutil64 read-symlink oss://examplebucket/test.jpg`
+
+### 5. du
 
 获取指定bucket,文件目录下包含的所有object的大小。     
 
@@ -190,7 +209,7 @@
 ./ossutil64 du oss://examplebucket/test --all-versions --block-size KB
 ```
 
-### 5. ls
+### 6. ls
 
 #### 列举bucket
 
@@ -284,7 +303,7 @@ prefix:目标Object前缀。当您列举目标Bucket中指定前缀的Object时�
 ./ossutil64 ls oss://examplebucket/example.txt --all-versions
 ```
 
-### 6. mb(创建存储空间)
+### 7. mb(创建存储空间)
 
 ```
 ./ossutil64 mb oss://bucketname [--acl <value>][--storage-class <value>][--redundancy-type <value>]
@@ -298,7 +317,7 @@ prefix:目标Object前缀。当您列举目标Bucket中指定前缀的Object时�
 
 --redundancy-type:LRS; ZRS
 
-### 7.mkdir(创建目录)
+### 8.mkdir(创建目录)
 
 创建单级目录
 
@@ -313,7 +332,19 @@ prefix:目标Object前缀。当您列举目标Bucket中指定前缀的Object时�
 ```
 如果误删除了2021/目录，且上一级目录Photo/下文件个数为0，则Photo/目录也会被自动移除。
 
+### 9. appendfromfile (追加上传)
 
+appendfromfile命令用于在已上传的追加类型文件（Appendable Object）末尾直接追加内容。
+
+在exampleobject.txt文件末尾追加文件dest.txt的内容。
+
+`./ossutil64 appendfromfile dest.txt oss://examplebucket/exampleobject.txt`
+
+### 10. sign (生成签名URL)
+
+为目标存储空间examplebucket下的文件exampleobject.png生成文件URL，并指定超时时间为3600秒。
+
+`./ossutil64 sign oss://examplebucket/exampleobject.png --timeout 3600`
 
 
 
