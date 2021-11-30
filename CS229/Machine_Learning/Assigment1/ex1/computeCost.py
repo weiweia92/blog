@@ -9,5 +9,5 @@ def compute_cost(X, y, theta):
     # Instructions : Compute the cost of a particular choice of theta.
     #                You should set the variable "cost" to the correct value.
 
-    cost = np.sum(np.dot(X, theta) - y) ** 2 / (2 * m)
+    cost = np.sum((np.dot(X, theta) - y) ** 2) / (2 * m)
     return cost    
