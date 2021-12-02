@@ -1,45 +1,23 @@
-import itertools as it
-import ipdb
-
-def is_brother_word(L):
-    res = it.permutations(L)
-    brother_words = []
-    for item in res:
-        brother_word = ''
-        for i in item:
-            brother_word += i
-        brother_words.append(brother_word)
-    return brother_words
-
-def strs2list(strings):
-    L = []
-    for i in strings:
-        L.append(i)
-    return L
-
-def intersection(l1,l2):
-    intersec = []
-    L = min(len(l1), len(l2))
-    for i in range(L):
-        if l1[i] in l2:
-            intersec.append(l1[i])
-    return intersec
-
+#定义一个单词的“兄弟单词”为：交换该单词字母顺序（注：可以交换任意次），而不添加、删除、修改原有的字母就能生成的单词。
+#兄弟单词要求和原来的单词不同。例如： ab 和 ba 是兄弟单词。 ab 和 ab 则不是兄弟单词。
+#现在给定你 n 个单词，另外再给你一个单词 str ，让你寻找 str 的兄弟单词里，按字典序排列后的第 k 个单词是什么？
+'''
+输入：3 abc bca cab abc 1
+输出：2
+     bca
+'''
 while True:
     try:
         line = input().split(' ')
-        n = int(line[0])
         words = line[1:-2]
         target = line[-2]
-        target_list = strs2list(target)
-        brother_words = is_brother_word(target_list)
-        brother_words.remove(target)
-        sorted_brother_words = sorted(brother_words)
-        id = int(line[-1])
-        print(len(intersection(words, sorted_brother_words)))
-        L = intersection(words, sorted_brother_words)
-        if L[id-1]:
-            print(L[id-1])
+        index = int(line[-1])
+        bros = []
+        for word in words:
+            if word != target and sorted(word) == sorted(target):
+                bros.append(word)
+        print(len(bros))
+        if len(bros) >= index:
+            print(sorted(bros)[index - 1])
     except:
         break
-        
