@@ -54,7 +54,7 @@ class LogisticRegression(LinearModel):
             
             # Compute Hessian Matrix
             h_x = 1 / (1 + np.exp(-x.dot(self.theta)))
-            H = (x.T * h_x * (1 - h_x)).dot(x) / m
+            H = (x.T * h_x * (1 - h_x)).dot(x) / m 
             gradient_J_theta = x.T.dot(h_x - y) / m
 
             # Updata theta

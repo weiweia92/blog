@@ -22,7 +22,7 @@ def main(train_path, eval_path, pred_path):
     model.fit(x_train, y_train)
 
     # Plot data and decision boundary
-    util.plot(x_train, y_train, model.theta, 'output/p01e_{}.png'.format(pred_path[-5]))
+    util.plot(x_train, y_train, model.theta, './src/output/p01e_{}.png'.format(pred_path[-5]))
 
     # Save predictions
     x_eval, y_eval = util.load_dataset(eval_path, add_intercept=True)
