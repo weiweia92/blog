@@ -38,8 +38,7 @@ def load_dataset(csv_path, label_col='y', add_intercept=False):
     # Validate label_col argument
     allowed_label_cols = ('y', 't')
     if label_col not in allowed_label_cols:
-        raise ValueError('Invalid label_col: {} (expected {})'
-                         .format(label_col, allowed_label_cols))
+        raise ValueError(f'Invalid label_col: {label_col} (expected {allowed_label_cols})')
 
     # Load headers
     with open(csv_path, 'r') as csv_fh:
