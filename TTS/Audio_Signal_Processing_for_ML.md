@@ -1,4 +1,64 @@
-we can see that the second impulse response just overlapped and added to the first impulse response.Why did we just overlap-and-add that second impulse response?The linear filter tells us that the output is just a sequence of overlapped-and-added impulse responses.The whole process of taking this time domain signal and using it to provoke impulse responses and then overlap-and-adding them in the output is called "convolution".Now how about keeping the filter the same and changing the source?The source only has one thing that you can change and that's the fundamental frequency. the pitch is changing but the vowel quality is the same. We've independently controlled source and filter.So, what have we achieved?We've taken natural speech, we've fitted the source-filter model to it, in particular we solved for the filter coefficients, then we've excited that filter with synthetic impulse trains at a fundamental frequency of our choice.Our source-filter model decomposes speech signals into a source component(that's either an impulse train for voiced speech, or white noise for unvoiced speech) and a filter (which has a frequency response determined by its coefficients)语音的频率pitchpitch is a part of a collection of other acoustic features that speakers use, which collectively we call prosody.声音的尖锐程度，在频域中表现为频率的高低。timbre音色音色在广义上是指声音不同于其它的特点，在语音中不同的音节都有不同的特点，这可以通过频域观察出来，另外，特别地，对于元音我们可以通过共振峰来分辨音色。noise噪音、辅音(摩擦音)都会有broad spectrum，也就是说我们无法通过共振峰来识别它们。envelope包络在波的时域和频域图中，用来形容图形的整体形状的叫做包络。比如在时域中，如果时间的分辨率较低，我们可以看到语音被分成一个一个菱形，上半部分三角形的轮廓就叫做  包络。下图展示了各种声音在时频域中的样子：3. Utterancehierarchy(等级制度) of phone如下图所示：可以看到Utterance满足层次结构，一般提取特征也是基于多个层次来做的。syllables最小的可以发声(pronounceable)的单元。open syllable(音节)：以元音为结尾的音节closed syllable：以辅音为结尾的音节consonant辅音 cluster：很多个辅音连接在一起，英文中常见accent / stress units发音的特性，有些语言通过声调来区分意义，比如日语或者中文，而英语是通过重音来区分意义的。rhythm(韵律) / isochrony也就是发声时候的节奏,中文是汉字，英文是由重音来作为分隔的。prosodic(韵律) / intonation units(语调单元)韵律、声调，针对单词和短语utterances（发声）一般是句子，但也可以变长。标点符号分隔。neighboring phones influence each other a lot。4. TTS Pipeline传统的TTS主要是通过组合多个模块构成流水线来实现的，整个系统可以大致分为frontend和backend。frontend主要是文字处理，使用NLP技术，从离散到离散，包括基本的分词、text normalization、POS以及特有的pronunciation标注。segmentation & normalization去噪、分句、分词以及把缩写、日期、时间、数字还有符号都换成可发音的词，这一步叫spell out。基本都基于规则grapheme-to-phoneme利用发音词典和规则，生成音素。音素一般利用ASCII编码，比如SAMPA和ARPAbet，这种编码在深度模       型中也可以被支持。这里的一个问题是pronunciation一般基于上下文，因为上下文可能决定了词的词性       等，比如read的过去式就有不同的读音IPA(international Phonetic Alphabet)是一个基于拉丁字母的语音标注系统。IPA只能表示口语的性质，比如因素，音调，音节等，如果还想要表       示牙齿舌头的变动则还有一个extension IPA可以用。IPA中最基本两种字母是letter和diacritic(变音符           号)，后者用来表示声调。IPA虽然统一了不同语言的发音，但是英语本身是stress language所以注音很        少，而中文这样依赖于音调的语言就会包含很多音调。intonation/stress generation这一步比较难，基本根据规则，或者构造统计模型前端和后端基本独立。backend根据前端结果生成语音，从离散到连续SSML(speech synthesis markup language)一种专门为语音合成做出来的语言，基于XML，包含了发音信息。waveform synthesis包含很多方法formant-based: 基于规则来生成共振峰还有其它成分concatenative: 基于database copy&pasteparametric model: HMM等，神经网络就是最新的参数模型Audio Signal Processing for Machine LearningFeatures of SoundFrequency :Hz(the number of times per second) higher frequency->higher soundIntensity(强度)   larger amplitude->louderSound power: Rate at which energy is transferred(转入)   Energy per unit of time(时间单元) emitted(发出) by a sound source in all directions   Measured in watt(W) Sound intensity: sound power per unit area    --->louderMeasured in threshold of hearing:human can perceive sounds with very small intensities                                threshold of pain(hearing pain):Intensity levelLogarithmic scaleMeasured in decibels(dB)Ratio(比率) between two intensity valuesUse an intensity of reference(TOH)                                                 I:intensity level      LoudnessSubjective(主观) perception of sound intensityDepends on duration/frequency of a soundDepends on ageMeasured in phons                 Equal loudness contours                                          Timbre(音色)Timbre is multidimensional, 音色在广义上是指声音不同于其它的特点，在语音中不同的音节都有不同的特点，这可以通过频域观察出来，另外，特别地，对于元音我们可以通过共振峰来分辨音色Sound envelope：Attack-Decay-Sustain-Release Modelc.Harmonic content(谐波含量)complex sound:superposition(叠加) of sinusoids,a partial is a sinusoid used to describe a sound,the lowest partial is called fundamental frequency(基频)，a harmonic partial is a frequency that's a multiple of the fundamental frequency.Inharmonicity indicates a deviation(偏差) from a harmonic partiald.Amplitude/frequency modulation(调制)PCM(编码方式) and WAV(文件格式)WAV：wav是一种无损的音频文件格式，WAV符合 PIFF(Resource Interchange File Format)规范。所有的WAV都有一个文件头，这个文件头音频流的编码参数。WAV对音频流的编码没有硬性规定，除了PCM之外，还有几乎所有支持ACM规范的编码都可以为WAV的音频流进行编码。PCM:PCM（Pulse Code Modulation----脉码调制录音)。所谓PCM录音就是将声音等模拟信号变成符号化的脉冲列，再予以记录。PCM信号是由[1]、[0]等符号构成的数字信号，而未经过任何编码和压缩处理。与模拟信号比，它不易受传送系统的杂波及失真的影响。动态范围宽，可得到音质相当好的影响效果。简单来说：wav是一种无损的音频文件格式，pcm是没有压缩的编码方式。wav可以使用多种音频编码来压缩其音频流，不过我们常见的都是音频流被pcm编码处理的wav，但这不表示wav只能使用pcm编码，mp3编码同样也可以运用在wav中，和AVI一样，只要安装好了相应的Decode，就可以欣赏这些wav了。在Windows平台下，基于PCM编码的WAV是被支持得最好的音频格式，所有音频软件都能完美支持，由于本身可以达到较高的音质的要求，因此，WAV也是音乐编辑创作的首选格式，适合保存音乐素材。因此，基于PCM编码的WAV被作为了一种中介的格式，常常使用在其他编码的相互转换之中，例如MP3转换成WMA。简单来说：pcm是无损wav文件中音频数据的一种编码方式，但wav还可以用其它方式编码。Pre-Emphasis首先，在信号上施加预加重滤波器，以放大高频。                                                                    一般取0.95 or 0.97作用：平衡频谱，因为高频通常比低频具有较小的幅度避免傅里叶变换过程中出现数值问题可以改善信噪比(SNR:Signal-to-Noise Ratio)                                       Extracting FeaturesTime-domain featuresAmplitude envelope(AE)Max amplitude value of all samples in a frame    Amplitude envelope at frame t:          K:frame size  s(k): Amplitude of kth sample  t.K: First sample of frame t  (t+1).K-1: last sample of frame tGives rough idea of loudnessSensitive to outliersOnset detection, music genre classificationFRAME_SIZE = 1024
+## TTS Pipeline
+
+![](pic/1612236452729-6511ef88-c89f-4d5b-8b76-8aca9dca00a4.png)
+
+传统的TTS主要是通过组合多个模块构成流水线来实现的，整个系统可以大致分为frontend和backend。
+
+- frontend        
+    主要是文字处理，使用NLP技术，从离散到离散，包括基本的分词、text normalization、POS以及特有的pronunciation标注。     
+
+    - segmentation & normalization         
+        去噪、分句、分词以及把缩写、日期、时间、数字还有符号都换成可发音的词，这一步叫spell out。基本都基于规则
+        
+    - grapheme-to-phoneme     
+        利用发音词典和规则，生成音素。音素一般利用ASCII编码，比如SAMPA和ARPAbet，这种编码在深度模型中也可以被支持。这里的一个问题是pronunciation一般基于上下文，因为上下文可能决定了词的词性等，比如read的过去式就有不同的读音
+        
+    - IPA(international Phonetic Alphabet)        
+        是一个基于拉丁字母的语音标注系统。IPA只能表示口语的性质，比如因素，音调，音节等，如果还想要表示牙齿舌头的变动则还有一个extension IPA可以用。IPA中最基本两种字母是letter和diacritic(变音符号)，后者用来表示声调。IPA虽然统一了不同语言的发音，但是英语本身是stress language所以注音很少，而中文这样依赖于音调的语言就会包含很多音调。
+        
+    - intonation/stress generation
+        这一步比较难，基本根据规则，或者构造统计模型
+        
+前端和后端基本独立。
+
+- backend
+    根据前端结果生成语音，从离散到连续,神经网络就是最新的参数模型                                 
+
+## Extracting Features
+
+### Pre-Emphasis
+
+首先，在信号上施加预加重滤波器，以放大高频。    
+
+$y(t)=x(t)-\alpha x(t-1)$, $\alpha$ 一般取0.95 or 0.97
+
+作用：
+
+1. 平衡频谱，因为高频通常比低频具有较小的幅度
+
+2. 避免傅里叶变换过程中出现数值问题
+
+3. 可以改善信噪比(SNR:Signal-to-Noise Ratio)      
+
+### Time-domain features
+
+- Amplitude envelope(AE)
+    
+    1. Max amplitude value of all samples in a frame      
+        Amplitude envelope at frame t: 
+        $$ AE_t=\max_{k=t\cdot K}^{(t+1)\cdot K-1}s(k) $$ 
+        K:frame size     
+        s(k): Amplitude of kth sample      
+        t.K: First sample of frame t       
+        (t+1).K-1: last sample of frame t .   
+    2. Gives rough idea of loudness
+    
+    3. Sensitive to outliers
+    
+    4. Onset detection, music genre classification
+
+```   
+FRAME_SIZE = 1024
 HOP_LENGTH = 512
 
 def amplitude_envelope(signal, frame_size, hop_length):
@@ -12,14 +72,133 @@ def amplitude_envelope(signal, frame_size, hop_length):
 
 def fancy_amplitude_envelope(signal, frame_size, hop_length):
     """Fancier Python code to calculate the amplitude envelope of a signal with a given frame size."""
-    return np.array([max(signal[i:i+frame_size]) for i in range(0, len(signal), hop_length)])Root-mean-square energy(RMS)  1. RMS of all samples in a frame                : sum of energy of samples in frame tIndicator of loudnessLess sensitive to outliers than AEAudio segmentation(音频分割), music genre(流派) classificationrms_debussy = librosa.feature.rms(debussy, frame_length=FRAME_SIZE, hop_length=HOP_LENGTH)[0]def rmse(signal, frame_size, hop_length):
-    rmse = []
+    return np.array([max(signal[i:i+frame_size]) for i in range(0, len(signal), hop_length)])
+```
+
+- Root-mean-square energy(RMS)   
+
+    1. RMS of all samples in a frame          
+        $RMS_t=\sqrt{\frac{1}{K}\cdot \sum_{k=t\cdot K}^{(t+1)\cdot K-1}s(k)^2}$                
+        $\sum_{k=t\cdot K}^{(t+1)\cdot K-1}s(k)^2$: sum of energy of samples in frame t         
     
-    # calculate rmse for each frame
-    for i in range(0, len(signal), hop_length): 
-        rmse_current_frame = np.sqrt(sum(signal[i:i+frame_size]**2) / frame_size)
-        rmse.append(rmse_current_frame)
-    return np.array(rmse)    Zero-crossing rate(ZCR)  1.Number of times a signal crosses the horizontal axis     sgn:sign functionRecognition of percussive(打击乐) vs pitched soundsMonophonic pitch estimationVoice/unvoiced decision for speech signalszcr_debussy = librosa.feature.zero_crossing_rate(debussy, frame_length=FRAME_SIZE, hop_length=HOP_LENGTH)[0]FramesPerceivable(可感知的) audio chunk1 sample@44.1kHz=0.0227ms duration 1 sample << Ear's time resolution(10ms)Power of 2 num. samples (speed up the process a lot) df:duration                                                                           音频在量化得到二进制的码字后，需要进行变换，而变换（MDCT）是以块为单位（block）进行的，一个块由多个（120或128）样本组成。而一帧内会包含一个或者多个块。帧的常见大小有960、1024、2048、4096等。一帧记录了一个声音单元，它的长度是样本长度和声道数的乘积。                            The larger analysis frame means we're able to be less precise about where in time that snalysis applies to , so we get lower time resolution, so it's going to be a trade-off.From time to frequency domainUse Fourier transform,we can move from time into frequency domain but unfortunately there's a major issue which is called spectral leakageSpectral leakageProcessed signal isn't an integer number of periodsEndpoints(端点) are discontinous                         Discontinuities appear as high-frequency components not present in the original signal,some of this discontinuities frequencies at the discontinuities are just like leaked into other higher frequencies. Solve the spectral leakage use windowingWindowingApply windowing function to each frame before we feed the frames into the FT Eliminates samples at both ends of a frameGenerates a periodic signal which minimizes special leakage Why not using rectangular window functions?we're accidentally introduced something into the signal that wasn't there in the original, that is the sudden changes at the edge of the signal.If we analysed this signal we'd not only be analysing the speech but also those artefacts. So we don't generally use rectangular window functions because these artefacts are bad, but rather we use tapered(锥形) windows. It doesn't have those sudden discontinuous at the edges.Hann window                                                                                                                                             3 frames,we find the endpoints of frame lose signal,how we solve this? overlapping!                                                            When converting a waveform to a sequence of frames, why is the frame shift usually smaller than the frame duration?  (不懂)Because a tapered window is applied to each frame.How can series expansion be used to remove high-frequency noise from a waveform? By truncating the series, which means setting to zero the coefficients of all the basis functions above a  frequency of our choosing.In Fourier analysis, what are the frequencies of the lowest and highest basis functions?The lowest frequency basis function has a fundamental period equal to the analysis frame duration. The highest frequency basis function is at the Nyquist frequency.  **傅里叶相关理论知识在傅里叶相关知识里说明FT(Fourier transform)IntuitionDecompose a complex sound into its frequency componentsWe can make any complex wave by adding together sine waves. Compare signal with sinusoids of various frequencies将时域上的信号转变为频域上的信号，看问题的角度也从时间域转到了频率域，因此在时域中某些不好处理的地方，在频域就可以较为简单的处理，这就可以大量减少处理信号计算量。信号经过傅里叶变换后，可以得到频域的幅度谱(magnitude)以及相位谱(phase)，信号的幅度谱和相位谱是信号傅里叶变换后频谱的两个属性。在分析信号时，主要应用于处理平稳信号，通过傅里叶变换可以获取一段信号总体上包含哪些频率的成分，但是对各成分出现的时刻无法得知。因此对于非平稳信号，傅里叶变换就显示出了它的局限性，而我们日常生活中的绝大多数音频都是非平稳信号的。而解决这一问题的方法，就是采用短时傅里叶变换或者小波变换，对信号进行处理DFT(Discrete Fourier transform)   ---------->  其中k=[0,M-1]=[0,N-1]#frequencies(M)=#samples(N)why M=N?   Invertible transformation,computational efficientRedundancy in DFT (Nyquist Frequency)FFT(Fast Fourier Transform)DFT is computationally expensive FFT is more efficient FFT exploits redundancies across sinusoidsFFT works when N is a power of 2# fast fourier transform
+    2. Indicator of loudness
+    
+    3. Less sensitive to outliers than AE
+    
+    4. Audio segmentation(音频分割), music genre(流派) classification
+    ```
+    rms_debussy = librosa.feature.rms(debussy, frame_length=FRAME_SIZE, hop_length=HOP_LENGTH)[0]
+    ```
+    ```
+    def rmse(signal, frame_size, hop_length):
+        rmse = []
+        
+        # calculate rmse for each frame
+        for i in range(0, len(signal), hop_length): 
+            rmse_current_frame = np.sqrt(sum(signal[i:i+frame_size]**2) / frame_size)
+            rmse.append(rmse_current_frame)
+        return np.array(rmse)    
+    ```
+
+- Zero-crossing rate(ZCR)  
+
+    1.Number of times a signal crosses the horizontal axis     
+    $ZCR_t=\frac{1}{2}\cdot \sum_{k=t\cdot K}^{(t+1)\cdot K-1}|sgn(s(k))-sgn(s(k+1))|$  sgn:sign function
+    
+    2. Recognition of percussive(打击乐) vs pitched sounds
+    
+    3. Monophonic pitch estimation
+    
+    4. Voice/unvoiced decision for speech signals
+    ```
+    zcr_debussy = librosa.feature.zero_crossing_rate(debussy, frame_length=FRAME_SIZE, hop_length=HOP_LENGTH)[0]
+    ```
+### Frames
+
+- Perceivable(可感知的) audio chunk1 
+    sample@44.1kHz=0.0227ms duration 1 sample << Ear's time resolution(10ms)
+    
+    Power of 2 num. samples (speed up the process a lot) df:duration   
+    $d_f=\frac{1}{s_r}\cdot K$                                                                        
+    
+音频在量化得到二进制的码字后，需要进行变换，而变换（MDCT）是以块为单位（block）进行的，一个块由多个（120或128）样本组成。而一帧内会包含一个或者多个块。帧的常见大小有960、1024、2048、4096等。一帧记录了一个声音单元，它的长度是样本长度和声道数的乘积。                            
+
+![](pic/1604902781844-555b0848-e8d8-4e79-a997-5a08d32b2ab6.png)
+
+The larger analysis frame means we're able to be less precise about where in time that analysis applies to , so we get lower time resolution, so it's going to be a trade-off.
+
+**From time to frequency domain**
+
+Use Fourier transform,we can move from time into frequency domain but unfortunately there's a major issue which is called spectral leakage
+
+### Spectral leakage
+
+- Processed signal isn't an integer number of periods
+
+- Endpoints(端点) are discontinous                         
+
+![](pic/1606372101109-3811d464-5c8a-43f1-9e88-555c276d68d2.png)
+![](pic/1606375573670-9cdffd77-41d0-4cbd-a91b-36884cf0cdff.png)
+
+- Discontinuities appear as high-frequency components not present in the original signal,some of this discontinuities frequencies at the discontinuities are just like leaked into other higher frequencies.
+
+**Solve the spectral leakage use windowing**
+
+### Windowing
+
+- Apply windowing function to each frame before we feed the frames into the FT 
+
+- Eliminates samples at both ends of a frame
+
+- Generates a periodic signal which minimizes special leakage 
+
+**Why not using rectangular window functions?**
+
+We're accidentally introduced something into the signal that wasn't there in the original, that is the sudden changes(突变) at the edge of the signal. If we analysed this signal we'd not only be analysing the speech but also those artefacts. So we don't generally use rectangular window functions because these artefacts are bad, but rather we use tapered(锥形) windows. It doesn't have those sudden discontinuous at the edges.
+
+#### Hann window      
+
+$w(k)=0.5\cdot(1-cos(\frac{2\pi k}{K-1})),k=1,...K$    
+
+![](pic/1606376259199-7ebb71c3-843c-41cc-ac09-5541414c575a.png)
+![](pic/1606376494600-2d37a113-37dd-424e-84ed-4ad5484ea18f.png)
+![](pic/1606376572093-7c633681-67ef-4ce4-a132-b4ca2a6f3712.png)
+
+3 frames,we find the endpoints of frame lose signal,how we solve this? overlapping!     
+
+![](pic/1606380793777-f900daf1-6a0e-49f3-8af5-d6f61b5f9bb4.png) ![](pic/1606380805583-0ebe80bf-af7f-45c1-a529-945d7a8329cd.png)
+
+**When converting a waveform to a sequence of frames, why is the frame shift usually smaller than the frame duration?  (不懂)**
+
+Because a tapered window is applied to each frame.
+
+**How can series expansion be used to remove high-frequency noise from a waveform?**
+
+By truncating the series, which means setting to zero the coefficients of all the basis functions above a  frequency of our choosing.
+
+**In Fourier analysis, what are the frequencies of the lowest and highest basis functions?**
+
+The lowest frequency basis function has a fundamental period equal to the analysis frame duration. The highest frequency basis function is at the Nyquist frequency.  
+
+>**傅里叶相关理论知识在傅里叶相关知识里说明**
+
+### FT(Fourier transform)
+
+**Intuition**
+
+- Decompose a complex sound into its frequency components, We can make any complex wave by adding together sine waves. 
+
+- Compare signal with sinusoids of various frequencies
+
+--- 未完待续    
+
+将时域上的信号转变为频域上的信号，看问题的角度也从时间域转到了频率域，因此在时域中某些不好处理的地方，在频域就可以较为简单的处理，这就可以大量减少处理信号计算量。信号经过傅里叶变换后，可以得到频域的幅度谱(magnitude)以及相位谱(phase)，信号的幅度谱和相位谱是信号傅里叶变换后频谱的两个属性。
+
+在分析信号时，主要应用于处理平稳信号，通过傅里叶变换可以获取一段信号总体上包含哪些频率的成分，但是对各成分出现的时刻无法得知。因此对于非平稳信号，傅里叶变换就显示出了它的局限性，而我们日常生活中的绝大多数音频都是非平稳信号的。而解决这一问题的方法，就是采用短时傅里叶变换或者小波变换，对信号进行处理
+
+### DFT(Discrete Fourier transform)
+
+   ---------->  其中k=[0,M-1]=[0,N-1]#frequencies(M)=#samples(N)why M=N?   Invertible transformation,computational efficientRedundancy in DFT (Nyquist Frequency)FFT(Fast Fourier Transform)DFT is computationally expensive FFT is more efficient FFT exploits redundancies across sinusoidsFFT works when N is a power of 2# fast fourier transform
 violin_ft = np.fft.fft(violin_c4)
 magnitude_spectrum_violin = np.abs(violin_ft)
 

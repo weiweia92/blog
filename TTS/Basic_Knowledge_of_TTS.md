@@ -79,8 +79,46 @@ IPA: The International Phonetic Alphabet Keyboard
     - 摩擦音fricatives：声道半张半开，因此产生震动，比如s, z
     
     - 半元音approximants：发音时声道先闭合然后再张开，比如w, j
+
+### 语音的频率
+
+- pitch
+    pitch is a part of a collection of other acoustic features that speakers use, which collectively we call prosody.声音的尖锐程度，在频域中表现为频率的高低。
+    Periodic signals are perceived as(被认为) having a pitch(音调). That means that periodic signals are perceived as having a musical note: a tone. Pitch is a perceptual phenomenon(感知现象). The physical property of fundamental frequency(基频) relates to the perceptual quantity of pitch.
+
+    The physical signal property and the perceptual property pitch is not linear, actually logarithmic.
+    ![](pic/1606302200386-6bb3e0f0-72f4-4697-9459-c8d8942379aa.png)
+
+    Because there's a very simple relationshion between fundamental frequency and pitch.But that's not technically correct! They are not the same thing. The fundamental frequency is a physical property, it's the rate of vibration of the vocal folds. It could be done on speech signals analytically, but pitch is the perceptual phenomenon. It only exists in the mind of a listener, and so to do experiments about pitch would have to involve humens listening to speech.
+
+    Mapping pitch to frequency
+
+    $$F(p)=2^{\frac{p-69}{12}}\cdot440 $$
+    $$F(p+1)/F(p)=2^{1/12}=1.059$$
+
+    **Nyquist frequency**:  $f_N=\frac{s_r}{2}$
     
-### Sound sources
+- timbre
+    音色音色在广义上是指声音不同于其它的特点，在语音中不同的音节都有不同的特点，这可以通过频域观察出来，另外，特别地，对于元音我们可以通过共振峰来分辨音色。
+    
+    a. Timbre is multidimensional, 音色在广义上是指声音不同于其它的特点，在语音中不同的音节都有不同的特点，这可以通过频域观察出来，另外，特别地，对于元音我们可以通过共振峰来分辨音色            
+    b. Sound envelope：Attack-Decay-Sustain-Release Model.             
+    ![](pic/1606304841104-bb348446-d464-46c1-ad2e-4992c999103c.png)
+    ![](pic/1606304863752-43b10779-b8e3-40a7-b6d4-2808b9d9e17c.png)
+    c. Harmonic content(谐波含量)complex sound:superposition(叠加) of sinusoids,a partial is a sinusoid used to describe a sound,the lowest partial is called fundamental frequency(基频)，a harmonic partial is a frequency that's a multiple of the fundamental frequency.Inharmonicity indicates a deviation(偏差) from a harmonic partial
+    d. Amplitude/frequency modulation(调制)
+    
+- noise
+    噪音、辅音(摩擦音)都会有 broad spectrum，也就是说我们无法通过共振峰来识别它们。
+
+- envelope
+    包络在波的时域和频域图中，用来形容图形的整体形状的叫做包络。比如在时域中，如果时间的分辨率较低，我们可以看到语音被分成一个一个菱形，上半部分三角形的轮廓就叫做包络。
+    
+下图展示了各种声音在时频域中的样子：
+
+![](pic/1616032579093-e21da36c-b095-47da-b067-f33ace68aa18.png)
+    
+### Sound source 
 
 #### 1.voicing
 
@@ -92,21 +130,79 @@ All periodic signals have a repeating pattern.
 
 It's unpredictable, stochasic, we called this "aperiodic(非周期性的)"
 
-### Pitch
+### Utterance
 
-Periodic signals are perceived as(被认为) having a pitch(音调). That means that periodic signals are perceived as having a musical note: a tone. Pitch is a perceptual phenomenon(感知现象). The physical property of fundamental frequency(基频) relates to the perceptual quantity of pitch.
+#### 1.hierarchy(等级制度) of phone
 
-The physical signal property and the perceptual property pitch is not linear, actually logarithmic.
-![](pic/1606302200386-6bb3e0f0-72f4-4697-9459-c8d8942379aa.png)
+如下图所示：
 
-Because there's a very simple relationshion between fundamental frequency and pitch.But that's not technically correct! They are not the same thing. The fundamental frequency is a physical property, it's the rate of vibration of the vocal folds. It could be done on speech signals analytically, but pitch is the perceptual phenomenon. It only exists in the mind of a listener, and so to do experiments about pitch would have to involve humens listening to speech.
+![](pic/1616033684399-a519e5a3-fae6-4b94-a18f-af13624e9963.jpeg)
 
-Mapping pitch to frequency
+可以看到Utterance满足层次结构，一般提取特征也是基于多个层次来做的。
 
-$$F(p)=2^{\frac{p-69}{12}}\cdot440 $$
-$$F(p+1)/F(p)=2^{1/12}=1.059$$
+- syllables        
+    最小的可以发声(pronounceable)的单元。
+    - open syllable(音节)：以元音为结尾的音节
+        
+    - closed syllable：以辅音为结尾的音节
+        
+    - consonant辅音 cluster：很多个辅音连接在一起，英文中常见
+        
+- accent / stress units       
+    发音的特性，有些语言通过声调来区分意义，比如日语或者中文，而英语是通过重音来区分意义的。
+    
+- rhythm(韵律) / isochrony
+    也就是发声时候的节奏,中文是汉字，英文是由重音来作为分隔的。
+    
+- prosodic(韵律) / intonation units(语调单元)
+    韵律、声调，针对单词和短语
+    
+- utterances（发声）
+    一般是句子，但也可以变长。标点符号分隔。neighboring phones influence each other a lot。
 
-**Nyquist frequency**:  $f_N=\frac{s_r}{2}$
+### Features of Sound
+
+- Frequency        
+    Hz(the number of times per second) higher frequency->higher sound
+
+- Intensity(强度)       
+    larger amplitude->louder
+
+- Sound power         
+    Rate at which energy is transferred(转入)   
+    
+    Energy per unit of time(时间单元) emitted(发出) by a sound source in all directions   
+    
+    Measured in watt(W) 
+    
+- Sound intensity         
+    sound power per unit area    --->louder
+    
+    Measured in $W/m^2$
+    
+    threshold of hearing:human can perceive sounds with very small intensities $TOH=10^{-12}W/m^2$,threshold of pain(hearing pain): $TOP=10\cdot W/m^2$ 
+    
+    Intensity level
+
+    a. Logarithmic scale       
+    b. Measured in decibels(dB)         
+    c.Ratio(比率) between two intensity values          
+    d.Use an intensity of reference(TOH)        
+    $dB(I)=10\cdot log_{10}(\frac{1}{I_{TOH}})$ I:intensity level       
+    $dB(I_{TOH})=10\cdot log_{10}(\frac{I_{TOH}}{I_{TOH}})=0$      
+    
+    ![](pic/1606304430146-5d8f01fc-da2c-430f-bb9d-da095860a59e.png)
+    
+- Loudness
+    
+    a. Subjective(主观) perception of sound intensity        
+    b. Depends on duration/frequency of a sound          
+    c. Depends on age             
+    d. Measured in phons    
+
+    ![ Equal loudness contours](pic/1606304407668-12d3a037-da9f-448f-953f-6a65ada23632.png)                                        
+    
+   PCM(编码方式) and WAV(文件格式)WAV：wav是一种无损的音频文件格式，WAV符合 PIFF(Resource Interchange File Format)规范。所有的WAV都有一个文件头，这个文件头音频流的编码参数。WAV对音频流的编码没有硬性规定，除了PCM之外，还有几乎所有支持ACM规范的编码都可以为WAV的音频流进行编码。PCM:PCM（Pulse Code Modulation----脉码调制录音)。所谓PCM录音就是将声音等模拟信号变成符号化的脉冲列，再予以记录。PCM信号是由[1]、[0]等符号构成的数字信号，而未经过任何编码和压缩处理。与模拟信号比，它不易受传送系统的杂波及失真的影响。动态范围宽，可得到音质相当好的影响效果。简单来说：wav是一种无损的音频文件格式，pcm是没有压缩的编码方式。wav可以使用多种音频编码来压缩其音频流，不过我们常见的都是音频流被pcm编码处理的wav，但这不表示wav只能使用pcm编码，mp3编码同样也可以运用在wav中，和AVI一样，只要安装好了相应的Decode，就可以欣赏这些wav了。在Windows平台下，基于PCM编码的WAV是被支持得最好的音频格式，所有音频软件都能完美支持，由于本身可以达到较高的音质的要求，因此，WAV也是音乐编辑创作的首选格式，适合保存音乐素材。因此，基于PCM编码的WAV被作为了一种中介的格式，常常使用在其他编码的相互转换之中，例如MP3转换成WMA。简单来说：pcm是无损wav文件中音频数据的一种编码方式，但wav还可以用其它方式编码。
 
 ### Digital signal
 
@@ -214,3 +310,26 @@ The pitch period is a fragment of waveform coming out of the filter, and that's 
 
 ### Source-filter model
 
+![](pic/1620380311578-bd6d7241-276b-4b46-b4f2-3e2bc32560e5 (1).png)
+![](pic/1620380529055-e7996a62-9c52-4ef6-8812-00430581e19a.png)
+
+We can see that the second impulse response just overlapped and added to the first impulse response.
+
+**Why did we just overlap-and-add that second impulse response?**
+
+The linear filter tells us that the output is just a sequence of overlapped-and-added impulse responses. The whole process of taking this time domain signal and using it to provoke impulse responses and then overlap-and-adding them in the output is called **"convolution"**.
+
+![](pic/1620380861964-e65f8d09-7952-446e-9560-bc50f5beb794.png)
+
+**Now how about keeping the filter the same and changing the source?**
+
+The source only has one thing that you can change and that's the fundamental frequency. the pitch is changing but the vowel quality is the same. We've independently controlled source and filter.
+
+![](pic/1620381271970-e1d1478d-91aa-4095-8495-eb9c0d242e58.png)
+![](pic/1620385386034-8aa4f1b5-2e8f-4378-94a9-8f79510bcb7e.png)
+
+So, what have we achieved?
+
+We've taken natural speech, we've fitted the source-filter model to it, in particular we solved for the filter coefficients, then we've excited that filter with synthetic impulse trains at a fundamental frequency of our choice.
+
+Our source-filter model decomposes speech signals into a source component(that's either an impulse train for voiced speech, or white noise for unvoiced speech) and a filter (which has a frequency response determined by its coefficients)
