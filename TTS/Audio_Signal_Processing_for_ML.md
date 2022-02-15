@@ -256,7 +256,8 @@ overlapping frames
 
 #### From DFT to STFT                                                               
 
-$$\hat{x}(k)=\sum_{n=0}^{N-1}x(n)\cdot e^{-i2\pi n \frac{k}{n}} S(m,k)=\sum_{n=0}^{N-1}x(n+mH)\cdot w(n)\cdot e^{-i2\pi n \frac{k}{N}}$$
+$$\hat{x}(k)=\sum_{n=0}^{N-1}x(n)\cdot e^{-i2\pi n \frac{k}{n}}$$
+$$ S(m,k)=\sum_{n=0}^{N-1}x(n+mH)\cdot w(n)\cdot e^{-i2\pi n \frac{k}{N}}$$
 
 m:frame number     
 n: frame size    
@@ -264,7 +265,29 @@ w(n):windowing function
 
 #### Outputs
 
-we get a fourier coefficient for each of the frequency components we're decomposed our original signal into.and this is a one dimensional array it's just like a vector.DFTSpectral vector(#frequency bins)N complex Fourier coefficentsSTFTwe get a complex fourier coefficient for each frequency bin that we are considering for each frame.Spectral matrix (#frequency bins, #frames)    frequency bins=framesize/2 + 1     frames=(samples-framesize)/hopsize + 1Complex Fourier coefficients#Extracting Short-Time Fourier Transform
+we get a fourier coefficient for each of the frequency components we're decomposed our original signal into and this is a one dimensional array it's just like a vector.
+
+DFT
+
+- Spectral vector(#frequency bins)
+
+- N complex Fourier coefficents
+
+STFT
+
+- we get a complex fourier coefficient for each frequency bin that we are considering for each frame.Spectral matrix (#frequency bins, #frames)
+    frequency bins=framesize/2 + 1     
+    frames=(samples-framesize)/hopsize + 1
+- Complex Fourier coefficients#Extracting Short-Time Fourier Transform
+
+![](pic/1606217847062-f690cc5a-b70e-427e-a425-57524e5b6ae9.png)
+
+![](pic/1606218009633-21a942c7-6fd1-46cb-a425-d44515d975c5.png)
+
+![](pic/1606218069994-955a0887-d1dd-4e51-8d56-e6f7ae6ece4c.png)
+
+![](pic/1606219211354-15307c10-e091-416a-b3ba-5012ba9b4a1e.png)![](pic/1606219183209-deb39be2-f088-428f-8a20-20f7b2ecdfe4.png)
+```
 FRAME_SIZE = 2048
 HOP_SIZE = 512
 S_scale = librosa.stft(scale, n_fft=FRAME_SIZE, hop_length=HOP_SIZE)
@@ -282,8 +305,98 @@ def plot_spectrogram(Y, sr, hop_length, y_axis="linear"):
                              x_axis="time", 
                              y_axis=y_axis)
     plt.colorbar(format="%+2.f")
-plot_spectrogram(Y_scale, sr, HOP_SIZE)Linear spectrogramY_log_scale = librosa.power_to_db(Y_scale)
-plot_spectrogram(Y_log_scale, sr, HOP_SIZE, y_axis="log")Time/frequency trade offSTFT parametersFrame size: 一般选为256,512,1024,2048,4096hop size: 一般为1/2 ,1/4, 1/8 framesizeWindowing function: hann windowVisualising soundLinear-SpectrogramMel-SpectrogramsTime-frequency representationPerceptually-relevant amplitude representationPerceptually-relevant frequency representationMel scaleMel scale(梅尔标度):人耳能听到的频率范围是20-20000Hz，但人耳对Hz这种标度单位并不是线性感知关系让我们观察一下从Hz到mel的映射图，由于是log的关系，当频率较小时，mel随Hz变化较快；当频率很大时，mel的上升很缓慢，曲线的斜率很小。这说明了人耳对低频音调的感知较灵敏，在高频时人耳是很迟钝的。如果将普通的频率标度转化为梅尔频率标度，则人耳对频率的感知度就成了线性关系。线性频率标度映射到梅尔频率标度公式为：                                                                                                         梅尔标度滤波器组启发于此。Mel filter banksConvert lowest/highest frequency to MelCreate #bands equal spaced pointedConvert points back to Hertz  Round to nearest frequency bin Create triangular filters(the kind of building blocks of a mel filter bank)filter:滤波器是具有频率选择作用的电路(模拟滤波)或运算处理系统(数字滤波)，具有滤除噪声和分离各种不同信号的功能。按功能分：低通 高通 带通 带阻最后应用triangular filters计算滤波器组(filter banks)，通常用40个滤波器nfilt=40 on a Mel-scale to the power spectrum to 提取频带(frequency bands). 如上图所示，40个三角滤波器组成滤波器组，低频处滤波器密集，门限值大，高频处滤波器稀疏，门限值低。恰好对应了频率越高人耳越迟钝这一客观规律。上图所示的滤波器形式叫做等面积梅尔滤波器（Mel-filter bank with same bank area），在人声领域（语音识别，说话人辨认）等领域应用广泛，但是如果用到非人声领域，就会丢掉很多高频信息。这时我们更喜欢的或许是等高梅尔滤波器（Mel-filter bank with same bank height）：通过梅尔滤波器组将线性频谱转为梅尔频谱Recipe to extract Mel spectrogramExtract STFTConvert amplitude to DBsConvert frequencies to Mel scale  a.Choose number of mel bands(超参数)b.Construct mel filter banks,Mel filter bands' matrix shape:M=(#band, framesize/2+1)      c.Apply mel filter banks to spectrogram, Y=(framesize/2+1, #frames)    Mel spectrogram=MY=(#bands,#frames)#Mel filter banks
+plot_spectrogram(Y_scale, sr, HOP_SIZE)
+```
+
+Linear spectrogram
+
+![](pic/1606887952045-34415e0e-3600-4c4b-abeb-10b7c7e92163.png)
+
+```
+Y_log_scale = librosa.power_to_db(Y_scale)
+plot_spectrogram(Y_log_scale, sr, HOP_SIZE, y_axis="log")
+```
+![](pic/1606888068465-f6cb1714-8106-40fd-abd6-b94f3259dd1a.png)
+
+#### Time/frequency trade off
+
+![](pic/1606806289203-95b65125-ecc6-4363-ab85-c0af543cf977.png)
+![](pic/1606806301799-9da47212-f237-4d77-a9f3-cfdd0c222b01.png)
+
+#### STFT parameters
+
+Frame size: 一般选为256,512,1024,2048,4096
+
+hop size: 一般为1/2 ,1/4, 1/8 framesize
+
+Windowing function: hann window
+
+#### Visualising sound
+
+$$ Y(m,k)=|S(m,k)|^2$$
+
+#### Linear-Spectrogram
+
+![](pic/1606875156893-0c111d7c-02d1-43ba-b820-83eae4c1cf51.png)
+
+### Mel-Spectrograms
+
+- Time-frequency representation
+- Perceptually-relevant amplitude representation
+- Perceptually-relevant frequency representation
+
+#### Mel scale
+
+Mel scale(梅尔标度):人耳能听到的频率范围是20-20000Hz，但人耳对Hz这种标度单位并不是线性感知关系
+
+![](pic/1606216131717-134b8de8-6468-4e39-ab23-136447afd43e.png)
+
+让我们观察一下从Hz到mel的映射图，由于是log的关系，当频率较小时，mel随Hz变化较快；当频率很大时，mel的上升很缓慢，曲线的斜率很小。这说明了人耳对低频音调的感知较灵敏，在高频时人耳是很迟钝的。如果将普通的频率标度转化为梅尔频率标度，则人耳对频率的感知度就成了线性关系。线性频率标度映射到梅尔频率标度公式为：
+
+$$ m=2595log_{10}(1+\frac{f}{500})$$
+
+$$ f=700(10^{\frac{m}{2595}}-1)$$                                                                                      
+梅尔标度滤波器组启发于此。
+
+#### Mel filter banks
+
+1. Convert lowest/highest frequency to Mel
+
+2. Create #bands equal spaced pointed(等间距)
+
+3. Convert points back to Hertz  $f=700(10^{\frac{m}{2595}}-1)$
+
+4. Round to nearest frequency bin 
+
+5. Create triangular filters(the kind of building blocks of a mel filter bank)
+
+![](pic/1606706305561-f117beb9-e259-4104-891c-c353612558da.png)
+
+**Filter**:滤波器是具有频率选择作用的电路(模拟滤波)或运算处理系统(数字滤波)，具有滤除噪声和分离各种不同信号的功能。    
+按功能分：低通 高通 带通 带阻      
+最后应用triangular filters计算滤波器组(filter banks)，通常用40个滤波器nfilt=40 on a Mel-scale to the power spectrum to 提取频带(frequency bands). 
+
+![](pic/1606216501953-c87d2b68-c1b7-46a0-ae89-ddfd8b76e40a.png)
+
+如上图所示，40个三角滤波器组成滤波器组，低频处滤波器密集，门限值大，高频处滤波器稀疏，门限值低。恰好对应了频率越高人耳越迟钝这一客观规律。上图所示的滤波器形式叫做等面积梅尔滤波器（Mel-filter bank with same bank area），在人声领域（语音识别，说话人辨认）等领域应用广泛，但是如果用到非人声领域，就会丢掉很多高频信息。这时我们更喜欢的或许是等高梅尔滤波器（Mel-filter bank with same bank height）：
+
+![](pic/1606216493938-33530695-6e43-449c-aace-388c60257ff3.png)
+
+通过梅尔滤波器组将线性频谱转为梅尔频谱
+
+#### Recipe to extract Mel spectrogram
+
+1. Extract STFT  
+
+2. Convert amplitude to DBs
+
+3. Convert frequencies to Mel scale      
+    - a.Choose number of mel bands(超参数)    
+    - b.Construct mel filter banks,Mel filter bands' matrix shape:M=(#band, framesize/2+1)      
+    - c.Apply mel filter banks to spectrogram, Y=(framesize/2+1, #frames)    
+    **Mel spectrogram=MY=(#bands,#frames)**
+```    
+#Mel filter banks
 filter_banks = librosa.filters.mel(n_fft=2048, sr=22050, n_mels=10) # shape=(10, 1025)
 
 plt.figure(figsize=(25, 10))
@@ -291,7 +404,15 @@ librosa.display.specshow(filter_banks,
                          sr=sr, 
                          x_axis="linear")
 plt.colorbar(format="%+2.f")
-plt.show()Mel filter banks #Extracting Mel Spectrogram
+plt.show()
+```
+
+Mel filter banks 
+
+![](pic/1606892308597-f31423d1-a250-45fb-ab42-8a4c6c137572.png)
+
+```
+#Extracting Mel Spectrogram
 #mel_spectrogram.shape=(10, 342)
 mel_spectrogram = librosa.feature.melspectrogram(scale, sr=sr, n_fft=2048, hop_length=512, n_mels=10)
 log_mel_spectrogram = librosa.power_to_db(mel_spectrogram)
@@ -302,14 +423,116 @@ librosa.display.specshow(log_mel_spectrogram,
                          y_axis="mel", 
                          sr=sr)
 plt.colorbar(format="%+2.f")
-plt.show()Mel Frequency Cepstral Coefficient(MFCC)spectrum of a spectrum=cepstrumThe main point to understand about speech is that the sounds generated by a human are filtered by the shape of the vocal tract including tongue, teeth etc. This shape determines what sound comes out. If we can determine the shape accurately, this should give us an accurate representation of the phoneme being produced. The shape of the vocal tract(声带) manifests(表明) itself in the envelope(包络线) of the short time power spectrum(功率谱), and the job of MFCCs is to accurately represent this envelope. we can treat this log power spectrum as a signal at a time domain signal and we apply a inverse discrete fourier transform and we get the spectrum which is the spectrum of a spectrum.Understanding the CepstrumSpeech generationThe main point to understand about speech is that the sounds generated by a human are filtered by the shape of the vocal tract including tongue, teeth etc. This shape determines what sound comes out. If we can determine the shape accurately, this should give us an accurate representation of the phoneme being produced. The shape of the vocal tract(声带) manifests(表明) itself in the envelope(包络线) of the short time power spectrum(功率谱), and the job of MFCCs is to accurately represent this envelope. Separating the componentsspeech signal = Glottal pulse + vocal tract(声带)， vocal tract acts as a filter on the glottal pulseThis picks in red are called formants(共振峰)，formats carry identity of sound(timbre), you're perceive certain phonemes instead of others in other words,the spectral envelope provide us information about timbre.Log-spectrum - Spectral envelopeSpeech = Convolution of vocal tract frequency response with glottal pulse.Formalising speech  fourier transfrom  log(X(t)): log-spectrum     log(H(t)): spectral envelope     log(E(t)): glottal pulseDecompose that signal into its queferancy components and see how presence of the different frequency components are.              4Hz                                   100Hzthe low quefrency values represent the slowly change spectral information in speech spectral signal.Computing Mel-Frequency Cepstral Coefficients    Using the discrete cosine transform instead of the inverse fourier transform,.we get a number of coefficients(mfcc).Why?Simplified version of Fourier TransformGet real-valued coefficient  (discrete fourier transform get complex-valued coefficient)Decorrelate energy in different mel bandsReduce #dimensions to represent spectrumMFCCs advantageDescribe the "large" structures of the spectrum,we take like thefirst nfcc's which focusing on the spectral envelope on the formants about phonemes.Ignore fine spectral structures.Work well in speech and music processing.#Extract MFCCs
+plt.show()
+```
+![](pic/1606892580358-e1b3a951-46ae-41b0-b6d5-f730d5ee62c9.png)
+
+#### Mel Frequency Cepstral Coefficient(MFCC)
+
+![](pic/1606388527594-aedc6b84-1667-49d4-aa34-2ffa7d6d2214.png)
+
+**spectrum of a spectrum=cepstrum**
+
+![](pic/1606894129863-7e067353-730f-48e5-aefb-891ff754ab20.png)
+![](pic/1606894213918-89133ad6-e85b-4310-a804-601185e82a4d.png)
+
+we can treat this log power spectrum as a signal at a time domain signal and we apply a inverse discrete fourier transform and we get the spectrum which is the spectrum of a spectrum.
+
+![](pic/1606894833892-260a198e-bb50-4eb9-929e-5f2793ad0a81.png)
+
+### Understanding the Cepstrum
+
+#### Speech generation
+
+The main point to understand about speech is that the sounds generated by a human are filtered by the shape of the vocal tract including tongue, teeth etc. This shape determines what sound comes out. If we can determine the shape accurately, this should give us an accurate representation of the phoneme being produced. The shape of the vocal tract(声带) manifests(表明) itself in the envelope(包络线) of the short time power spectrum(功率谱), and the job of MFCCs is to accurately represent this envelope. 
+
+#### Separating the components
+
+speech signal = Glottal pulse + vocal tract(声带)， vocal tract acts as a filter on the glottal pulse
+
+![](pic/1606898659462-8f346a4b-56ca-4212-9ab5-6fc2270f5cd7.png)
+![](pic/1606898715735-880b53ea-0281-4b81-9139-a042b1c32fbf.png)
+
+This picks in red are called formants(共振峰)，formats carry identity of sound(timbre), you're perceive certain phonemes instead of others in other words,the spectral envelope provide us information about timbre.
+
+Log-spectrum - Spectral envelope
+
+![](pic/1606899212850-393b7df9-88d4-452f-8de8-66d6a4e672bc.png)
+
+**Speech = Convolution of vocal tract frequency response with glottal pulse.**
+**Formalising speech**
+
+$$ x(t)=e(t)\cdot h(t) \longrightarrow X(t)=E(t)\cdot H(t)$$
+
+**fourier transfrom**
+
+$$ log(X(t))=log(E(t)\cdot H(t))=log(X(t))=log(E(t))+log(H(t))$$  
+$log(X(t))$: log-spectrum     
+$log(H(t))$: spectral envelope       
+$log(E(t))$: glottal pulse
+
+Decompose that signal into its queferancy components and see how presence of the different frequency components are.         
+4Hz                                   100Hz             
+![](pic/1606900076756-84642a55-8232-445c-a90f-e7682b6d2c6a.png)
+
+the low quefrency values represent the slowly change spectral information in speech spectral signal.
+
+#### Computing Mel-Frequency Cepstral Coefficients    
+
+![](pic/1606900795810-6de113e2-86c6-490f-8e36-cfbd30fd1b6c.png)
+![](pic/1606900843377-392bb171-08d0-4967-a5ec-1eaf3f1e163b.png)
+
+Using the discrete cosine transform instead of the inverse fourier transform,.we get a number of coefficients(mfcc).
+
+**Why?**
+
+- Simplified version of Fourier Transform
+
+- Get real-valued coefficient  (discrete fourier transform get complex-valued coefficient)
+
+- Decorrelate energy in different mel bands
+
+- Reduce #dimensions to represent spectrum
+
+![](pic/1606902069797-77437a62-dad7-4cb1-a79f-d140f9963f8d.png)
+
+#### MFCCs advantage
+
+Describe the "large" structures of the spectrum,we take like the first mfcc's which focusing on the spectral envelope on the formants about phonemes. Ignore fine spectral structures. Work well in speech and music processing.
+```
+#Extract MFCCs
 mfccs = librosa.feature.mfcc(signal, n_mfcc=13, sr=sr )
 
 #calculate the first and second derivatives of the mfcc's
 delta_mfccs = librosa.feature.delta(mfccs)
 delta2_mfccs = librosa.feature.delta(mfccs, order=2)
 
-comprehensive_mfccs = np.concatenate((mfccs, delta_mfccs, delta2_mfccs))Extracting frequency-domain featuresMath conventions Magnitude of signal at frequency bin n and frame t.N: #frequency binsBand energy ratioComparison of energy in the lower/higher frequency bandsMeasure of how dominant low frequencies are                                                  F: split frequency, 一般取2000HzBand energy ratio applications(1)Music/speech discrimination (2)Music classification(eg.music genre classification)debussy_spec.shape=(1025, 1292)  # the spectrum of debussy audio
+comprehensive_mfccs = np.concatenate((mfccs, delta_mfccs, delta2_mfccs))
+```
+### Extracting frequency-domain features
+
+#### Math conventions 
+
+- $m_t(n):$ Magnitude of signal at frequency bin n and frame t.
+
+- N: #frequency bins
+
+#### Band energy ratio
+
+- Comparison of energy in the lower/higher frequency bands
+
+- Measure of how dominant low frequencies are 
+$$BER_t=\frac{\sum_{n=1}^{F-1}m_t(n)^2}{\sum_{n=F}^{N}m_t(n)^2}$$ 
+F: split frequency, 一般取2000Hz
+
+![](pic/1606908948434-740cacf3-e07b-4bba-8204-09fa464c32eb.png)
+
+#### Band energy ratio applications
+
+(1)Music/speech discrimination      
+(2)Music classification(eg.music genre classification)         
+```
+debussy_spec.shape=(1025, 1292)  # the spectrum of debussy audio
 debussy_spec_transpose = debussy_spec.T   #(1292, 1025)
 #1025:the number of freqency bins
 #Calculate Band Energy Ratio
@@ -321,7 +544,10 @@ def calculate_split_frequency_bin(spectrogram, split_frequency, sample_rate):
 	split_frequency_bin = np.floor(split_frequency / frequency_delta_per_bin)
     return int(split_frequency_bin)
 
-split_frequency_bin = calculate_split_frequency_bin(debussy_spec, 2000, 22050) #185def calculate_band_energy_ratio(spectrogram, split_frequency, sr):
+split_frequency_bin = calculate_split_frequency_bin(debussy_spec, 2000, 22050) #185
+```
+```
+def calculate_band_energy_ratio(spectrogram, split_frequency, sr):
     split_frequency_bin = calculate_split_frequency_bin(spectrogram, split_frequency, sr)
     # move to the power spectrogram
     power_spec = np.abs(spectrogram) ** 2
@@ -342,4 +568,45 @@ frames = range(len(ber_debussy))
 t = librosa.frames_to_time(frames, hop_length=HOP_SIZE)
 plt.figure(figsize=(25, 10))
 
-plt.plot(t, ber_debussy, color="b")Spectral centroid(谱质心)Centre of gravity of magnitude spectrum, weighted mean of the frequenciesFrequency band where most of the energy is concentratedMeasure of "brightness" of sound                                          n: frequency bin  : weight of nSpectral centroid applications(1)Audio classification (2) Music classificationsc_debussy = librosa.feature.spectral_centroid(y=debussy,sr=sr,n_fft=FRAME_SIZE,hop_length=HOP_SIZE)BandwidthDerived from spectral centroidSpectral range around the centroidVariance from the spectral centroidDescribe perceived timbreEnergy spread across frequency band(spectral spread) upper , upper,Energy spread across frequency band lower , lower.Bandwidth applicationsMusic processing(eg. music genre classification)ban_debussy = librosa.feature.spectral_bandwidth(y=debussy, sr=sr, n_fft=FRAME_SIZE, hop_length=HOP_LENGTH)[0]
+plt.plot(t, ber_debussy, color="b")
+```
+![](pic/1606912480774-38bef55d-047e-47e3-a7fa-265e2789472a.png)
+
+#### Spectral centroid(谱质心)
+
+- Centre of gravity of magnitude spectrum, weighted mean of the frequencies
+
+- Frequency band where most of the energy is concentrated
+
+- Measure of "brightness" of sound
+$$SC_t=\frac{\sum_{n-1}^{N}m_t(n)\cdot n}{\sum_{n-1}^{N}m_t(n)}$$
+n: frequency bin  
+$m_t(n)$: weight of n
+
+**Spectral centroid applications**
+
+(1)Audio classification       
+(2) Music classification         
+```
+sc_debussy = librosa.feature.spectral_centroid(y=debussy,sr=sr,n_fft=FRAME_SIZE,hop_length=HOP_SIZE)
+```
+#### Bandwidth
+
+- Derived from spectral centroid
+
+- Spectral range around the centroid
+
+- Variance from the spectral centroid
+
+- Describe perceived timbre
+
+![](pic/1606909803067-0657d34d-3d25-40f4-8fec-fc243db16abd.png)
+
+Energy spread across frequency band(spectral spread) upper , $BW_t$ upper, Energy spread across frequency band lower , $BW_t$ lower.
+
+##### Bandwidth applications
+
+Music processing(eg. music genre classification)
+```
+ban_debussy = librosa.feature.spectral_bandwidth(y=debussy, sr=sr, n_fft=FRAME_SIZE, hop_length=HOP_LENGTH)[0]
+```
