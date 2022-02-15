@@ -190,15 +190,37 @@ The lowest frequency basis function has a fundamental period equal to the analys
 
 - Compare signal with sinusoids of various frequencies
 
---- 未完待续    
-
 将时域上的信号转变为频域上的信号，看问题的角度也从时间域转到了频率域，因此在时域中某些不好处理的地方，在频域就可以较为简单的处理，这就可以大量减少处理信号计算量。信号经过傅里叶变换后，可以得到频域的幅度谱(magnitude)以及相位谱(phase)，信号的幅度谱和相位谱是信号傅里叶变换后频谱的两个属性。
 
 在分析信号时，主要应用于处理平稳信号，通过傅里叶变换可以获取一段信号总体上包含哪些频率的成分，但是对各成分出现的时刻无法得知。因此对于非平稳信号，傅里叶变换就显示出了它的局限性，而我们日常生活中的绝大多数音频都是非平稳信号的。而解决这一问题的方法，就是采用短时傅里叶变换或者小波变换，对信号进行处理
 
 ### DFT(Discrete Fourier transform)
 
-   ---------->  其中k=[0,M-1]=[0,N-1]#frequencies(M)=#samples(N)why M=N?   Invertible transformation,computational efficientRedundancy in DFT (Nyquist Frequency)FFT(Fast Fourier Transform)DFT is computationally expensive FFT is more efficient FFT exploits redundancies across sinusoidsFFT works when N is a power of 2# fast fourier transform
+$$\hat{g(f)}=\int g(t)\cdot e^{-i2\pi ft}dt $$
+----------> $$\hat {x(f)}=\sum_n x(n)\cdot e^{-i2\pi fn}=\hat{x}(k/N)=\sum_{n=0}^{N-1}x(n)\cdot e^{-i2\pi n \frac{k}{N}}$$ 
+其中$k=[0,M-1]=[0,N-1]$
+
+#frequencies(M)=#samples(N)
+
+**why M=N?**
+Invertible transformation,computational efficient
+
+**Redundancy in DFT (Nyquist Frequency)**
+
+![](pic/1606805679148-8f0d06e5-073c-47c9-ad97-9a192a510381.png)
+
+### FFT(Fast Fourier Transform)
+
+- DFT is computationally expensive $(N^2)$ 
+
+- FFT is more efficient $(N\text{log}_2 N)$ 
+
+- FFT exploits redundancies across sinusoids
+
+- FFT works when N is a power of 2
+
+```
+# fast fourier transform
 violin_ft = np.fft.fft(violin_c4)
 magnitude_spectrum_violin = np.abs(violin_ft)
 
@@ -215,7 +237,34 @@ def plot_magnitude_spectrum(signal, sr, title, f_ratio=1):
     plt.xlabel('Frequency (Hz)')
     plt.title(title)
    
-plot_magnitude_spectrum(violin_c4, sr, "violin", 0.1)STFTWindowingApply windowing function to signal overlapping framesFrom DFT to STFT                                                                    m: frame number     n: frame size    w(n):windowing functionOutputswe get a fourier coefficient for each of the frequency components we're decomposed our original signal into.and this is a one dimensional array it's just like a vector.DFTSpectral vector(#frequency bins)N complex Fourier coefficentsSTFTwe get a complex fourier coefficient for each frequency bin that we are considering for each frame.Spectral matrix (#frequency bins, #frames)    frequency bins=framesize/2 + 1     frames=(samples-framesize)/hopsize + 1Complex Fourier coefficients#Extracting Short-Time Fourier Transform
+plot_magnitude_spectrum(violin_c4, sr, "violin", 0.1)
+```
+![](pic/1606730414757-fd1695e0-641c-4d9c-a095-8fddec758636.png)
+
+
+### STFT
+
+#### Windowing
+
+Apply windowing function to signal $x_w(k)=x(k)\cdot w(k)$
+
+![](pic/1606734418841-4a09b34c-976c-4748-99da-10ad102fe11d.png)
+
+overlapping frames
+
+![](pic/1606734455370-1efc0a84-c75a-4ad0-8c3a-d53617d5bc4c.png)
+
+#### From DFT to STFT                                                               
+
+$$\hat{x}(k)=\sum_{n=0}^{N-1}x(n)\cdot e^{-i2\pi n \frac{k}{n}} S(m,k)=\sum_{n=0}^{N-1}x(n+mH)\cdot w(n)\cdot e^{-i2\pi n \frac{k}{N}}$$
+
+m:frame number     
+n: frame size    
+w(n):windowing function
+
+#### Outputs
+
+we get a fourier coefficient for each of the frequency components we're decomposed our original signal into.and this is a one dimensional array it's just like a vector.DFTSpectral vector(#frequency bins)N complex Fourier coefficentsSTFTwe get a complex fourier coefficient for each frequency bin that we are considering for each frame.Spectral matrix (#frequency bins, #frames)    frequency bins=framesize/2 + 1     frames=(samples-framesize)/hopsize + 1Complex Fourier coefficients#Extracting Short-Time Fourier Transform
 FRAME_SIZE = 2048
 HOP_SIZE = 512
 S_scale = librosa.stft(scale, n_fft=FRAME_SIZE, hop_length=HOP_SIZE)
