@@ -330,3 +330,51 @@ class Solution:
         curr.next = list1 or list2
         return dummy.next
 ```
+
+
+### 26. 删除有序数组中的重复项
+>输入：nums = [0,0,1,1,1,2,2,3,3,4]        
+>输出：5, nums = [0,1,2,3,4]
+```
+class Solution:
+    def removeDuplicates(self, nums):
+        position = 1
+        while position < len(nums):
+            if nums[position] == nums[position - 1]:
+                nums.pop(position)
+            else:
+                position += 1
+        return len(nums)
+```
+### 27. 移除元素
+>输入：nums = [3,2,2,3], val = 3           
+>输出：2, nums = [2,2]      
+```
+class Solution:
+    def removeElement(self, nums, val):
+        position = 0
+        while position < len(nums):
+            if nums[position] == val:
+                nums.pop(position)
+            else:
+                position += 1
+        return len(nums)
+```
+### 28. 实现strStr()
+给你两个字符串 haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串出现的第一个位置（下标从 0 开始）。如果不存在，则返回  -1 。对于本题而言，当 needle 是空字符串时我们应当返回 0 。
+```
+class Solution:
+    def strStr(self, haystack, needle):
+        return 0 if needle == '' else haystack.find(needle)
+```
+### 35.搜索插入位置
+给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
+>输入: nums = [1,3,5,6], target = 5          
+>输出: 2       
+```
+class Solution:
+    def searchInsert(self, nums, target):
+        if target not in nums:
+            nums.append(target)
+        return sorted(nums).index(target)
+```
