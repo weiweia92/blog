@@ -232,7 +232,7 @@ class Solution:
                 sum += dic[s[i]]
         return sum+dic[s[-1]]
 ```
-### 14. 最长公公前缀
+### 14. 最长公共前缀
 编写一个函数来查找字符串数组中的最长公共前缀。
 如果不存在公共前缀，返回空字符串 ""。         
 >示例 1：
@@ -262,28 +262,89 @@ class Solution:
 >输出：[[-1,-1,2],[-1,0,1]]
 ```
 class Solution:
-    def threeSum(self, nums: List[int]) -> List[List[int]]:
-        res = []
+    def threeSum(self, nums: List[int]) -> int:
         nums.sort()
-        for i, a in enumerate(nums):
-            if i > 0 and a == nums[i-1]:
+        res = []
+        for i in range(len(nums) - 2):
+            if i > 0 and nums[i] == nums[i-1]:
                 continue
-            l, r = i+1, len(nums)-1
+            l = i + 1
+            r = len(nums) - 1
             while l < r:
-                threeSum = a + nums[l] + nums[r]
-                if threeSum > 0:
-                    r -= 1
-                elif threeSum < 0:
-                    l += 1
-                else:
-                    res.append([a, nums[l], nums[r]])
+                threeSum = nums[i] + nums[l] + nums[r]
+                if threeSum == 0:
+                    res.append([nums[i], nums[l], nums[r]])
                     l += 1
                     while nums[l] == nums[l - 1] and l < r:
                         l += 1
+                if threeSum < 0:
+                    l += 1
+                else:
+                    r -= 1
         return res
 ```
-
-
+### 16. 最接近的三数之和
+给你一个长度为 n 的整数数组 nums 和 一个目标值 target。请你从 nums 中选出三个整数，使它们的和与target 最接近。返回这三个数的和。假定每组输入只存在恰好一个解。
+>输入：nums = [-1,2,1,-4], target = 1          
+>输出：2           
+>解释：与 target 最接近的和是 2 (-1 + 2 + 1 = 2) 。             
+```
+class Solution:
+    def threeSumClosest(self, nums: List[int], target: int) -> int:
+        nums.sort()
+        res = sum(nums[:3])
+        for i in range(len(nums) - 2):
+            l = i + 1
+            r = len(nums) - 1
+            while l < r:
+                threeSum = nums[i] + nums[l] + nums[r]
+                if abs(threeSum - target) < abs(res - target):
+                    res = threeSum
+                if threeSum < target:
+                    l += 1
+                else:
+                    r -= 1
+        return res
+```
+### 17. 电话号码的字母组合
+![](pic/letterCombination.png)
+```
+class Solution:
+    def letterCombinations(self, digits: str) -> List[str]:
+        phone_map = {'2':'abc','3':'def','4':'ghi','5':'jkl','6':'mno','7':'pqrs','8':'tuv','9':'wxyz'}
+        if len(digits) == 0:
+            return []
+        numbers = list(phone_map[digits[0]])
+        for digit in digits[1:]:
+            numbers = [old+new for old in numbers for new in list(phone_map[digit])]
+        return numbers
+```
+### 18. 
+### 19. 删除链表的倒数第N个节点
+![](pic/removeNthFromEnd.png)
+```
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+class Solution:
+    def removeNthFromEnd(self, head, n):
+        if not head:
+            return head
+        slow = ListNode()
+        slow.next = head
+        fast = slow
+        for i in range(n):
+            fast = fast.next
+        while (fast.next != None):
+            slow = slow.next
+            fast = fast.next
+        if slow.next = head:
+            head = head.next
+        else:
+            slow.next = slow.next.next
+        return head
+```
 ### 20. 有效的括号
 >输入：s = "()"      
 >输出：true        
@@ -330,8 +391,83 @@ class Solution:
         curr.next = list1 or list2
         return dummy.next
 ```
+### 22. 括号生成
+数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
+>输入：n = 3
+>输出：["((()))","(()())","(())()","()(())","()()()"]
+```
+class Solution:
+    def generateParenthesis(self, n):
+        # only add open paranthesis if open < n
+        # only add close paranthesis if closed < open
+        # valide IIF open == closed == n
+        stack = []
+        res = []
+        def backtrack(openN, closeN):
+            if openN == closeN == n:
+                res.append(''.join(stack))
+                return
+            if openN < n:
+                stack.append('(')
+                backtrack(openN + 1, closeN)
+                stack.pop()
+            if closeN < openN:
+                stack.append(')')
+                backtrack(openN, closeN + 1)
+                stack.pop()
+        backtrack(0, 0)
+        return res
+```
+### 23. 合并K个升序链表
+>输入：lists = [[1,4,5],[1,3,4],[2,6]]           
+>输出：[1,1,2,3,4,4,5,6]           
+>解释：链表数组如下：          
+>[           
+> 1->4->5,         
+>  1->3->4,         
+>  2->6         
+>]          
+>将它们合并到一个有序链表中得到。            
+>1->1->2->3->4->4->5->6         
+```
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
 
-
+class Solution:
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        if not lists:
+            return
+        if len(lists) == 1:
+            return lists[0]
+        mid = len(lists) // 2
+        l = self.mergeKLists(lists[:mid])
+        r = self.mergeKLists(lists[mid:])
+        return self.merge(l, r)
+    
+    def merge(self, l1, l2):
+        curr = dummy = ListNode(0)
+        while l1 and l2:
+            if l1.val <= l2.val:
+                curr.nex t = l1
+                l1 = l1.next
+            else:
+                curr.next = l2
+                l2 = l2.next
+            curr = curr.next
+        curr.next = l1 or l2
+        return dummy.next
+```
+### 24.两两交换链表中的节点
+![](pic/swapPairs.png)
+```
+```
+### 25. K个一组翻转链表
+给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。k 是一个正整数，它的值小于或等于链表的长度。如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。
+![](pic/reverseKGroup.png)
+```
+```
 ### 26. 删除有序数组中的重复项
 >输入：nums = [0,0,1,1,1,2,2,3,3,4]        
 >输出：5, nums = [0,1,2,3,4]
@@ -366,6 +502,88 @@ class Solution:
 class Solution:
     def strStr(self, haystack, needle):
         return 0 if needle == '' else haystack.find(needle)
+```
+### 29. 两数相除
+给定两个整数，被除数 dividend 和除数 divisor。将两数相除，要求不使用乘法、除法和 mod 运算符。返回被除数 dividend 除以除数 divisor 得到的商。
+```
+class Solution:
+    def divide(self, dividend: int, divisor: int) -> int:
+        #2147483647
+        d = abs(dividend)
+        dv = abs(divisor)
+        output = 0
+        while d >= dv:
+            tmp = dv
+            mul = 1
+            while d >= tmp:
+                d -= tmp
+                output += mul
+                mul += mul
+                tmp += tmp
+        if (dividend < 0 and divisor >= 0) or (divisor < 0 and dividend >= 0):
+            output = -output
+        return min(2**31-1,output)
+```
+### 32. 最长有效括号
+给你一个只包含 '(' 和 ')' 的字符串，找出最长有效（格式正确且连续）括号子串的长度。
+>输入：s = "(()"
+>输出：2
+>解释：最长有效括号子串是 "()"
+### 33. 搜索旋转排序数组
+整数数组 nums 按升序排列，数组中的值 互不相同 。
+
+在传递给函数之前，nums 在预先未知的某个下标 k（0 <= k < nums.length）上进行了 旋转，使数组变为 [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]（下标 从 0 开始 计数）。例如， [0,1,2,4,5,6,7] 在下标 3 处经旋转后可能变为 [4,5,6,7,0,1,2] 。
+
+给你 旋转后 的数组 nums 和一个整数 target ，如果 nums 中存在这个目标值 target ，则返回它的下标，否则返回 -1 。
+>输入：nums = [4,5,6,7,0,1,2], target = 0            
+>输出：4
+```
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        left, right = 0, len(nums) - 1
+        while left <= right:
+            mid = (left + right) // 2
+            if nums[mid] == target:
+                return mid
+            if target >= nums[0]:
+                if nums[mid] >= nums[0] and target > nums[mid]:
+                    left = mid + 1
+                else:
+                    right = mid - 1
+            else:
+                if nums[mid] >= nums[0] or target > nums[mid]:
+                    left += 1
+                else:
+                    right = mid - 1
+        return -1
+```
+### 34.在排序数组中查找元素的第一个和最后一个位置
+给定一个按照升序排列的整数数组 nums，和一个目标值 target。找出给定目标值在数组中的开始位置和结束位置。如果数组中不存在目标值 target，返回 [-1, -1]。进阶：你可以设计并实现时间复杂度为 O(log n) 的算法解决此问题吗？
+>输入：nums = [5,7,7,8,8,10], target = 8             
+>输出：[3,4]
+```
+class Solution:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        left = self.binSearch(nums, target, True)
+        right = self.binSearch(nums, target, False)
+        return [left, right]
+
+    def binSearch(self, nums, target, leftBias):
+        l, r = 0, len(nums) - 1
+        i = -1
+        while l <= r:
+            m = (l + r) // 2
+            if target > nums[m]:
+                l = m + 1
+            elif target < nums[m]:
+                r = m - 1
+            else:
+                i = m
+                if leftBias:
+                    r = m - 1
+                else:
+                    l = m + 1
+        return i
 ```
 ### 35.搜索插入位置
 给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。
