@@ -462,6 +462,23 @@ class Solution:
 ### 24.两两交换链表中的节点
 ![](pic/swapPairs.png)
 ```
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+class Solution:
+    def swapPairs(self, head: ListNode) -> ListNode:
+        dummy = ListNode(0)
+        res = dummy
+        dummy.next = head
+        while dummy.next and dummy.next.next:
+            first = dummy.next
+            second = dummy.next.next
+            first.next = second.next
+            second.next = first
+            dummy.next = second
+            dummy = dummy.next.next
+        return res.next
 ```
 ### 25. K个一组翻转链表
 给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。k 是一个正整数，它的值小于或等于链表的长度。如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。
@@ -524,7 +541,44 @@ class Solution:
             output = -output
         return min(2**31-1,output)
 ```
+### 31. 下一个排列
+整数数组的 下一个排列 是指其整数的下一个字典序更大的排列。更正式地，如果数组的所有排列根据其字典顺序从小到大排列在一个容器中，那么数组的 下一个排列 就是在这个有序容器中排在它后面的那个排列。如果不存在下一个更大的排列，那么这个数组必须重排为字典序最小的排列（即，其元素按升序排列）。
+>nums = [5,4,3,2,1]      
+>out -> [1,2,3,4,5] 
+
+>nums = [1,2,7,9,6,4,1]             
+>out -> [1,2,9,1,4,6,7]        
+
+>nums = [1,7,9,9,8,3]       
+>out -> [1,8,3,7,9,9]
+```
+class Solution:
+    def nextPermutation(self, nums):
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        N = len(nums)
+        pivot = 0
+        # find pivot
+        for i in range(N-1, 0, -1):
+            if nums[i-1] < nums[i]:
+                pivot = i
+                break
+        if pivot == 0:
+            nums.sort()
+            return
+        # then find the swap which first number > swap
+        swap = N - 1
+        while nums[pivot - 1] >= nums[swap]:
+            swap -= 1
+        # swap
+        nums[pivot - 1], nums[swap] = nums[swap], nums[pivot - 1]
+        nums[pivot:] = sorted(nums[pivot:])
+```
 ### 32. 最长有效括号
+```
+
+```
 给你一个只包含 '(' 和 ')' 的字符串，找出最长有效（格式正确且连续）括号子串的长度。
 >输入：s = "(()"
 >输出：2
