@@ -53,7 +53,7 @@ class Solution:
         ans = ''
         tmp = ''
         for i in s:
-            if i not in s:
+            if i not in tmp:
                 tmp += i
             else:
                 tmp = tmp[tmp.index(i)+1:] + i
@@ -94,7 +94,7 @@ class Solution:
             # odd length
             l, r = i, i
             while l >= 0 and r < len(s) and s[l] == s[r]:
-                if (r - l + 1) > resLen:
+                if (r + 1 - l) > resLen:
                     res = s[l: r+1]
                     resLen = r - l + 1
                 l -= 1
@@ -102,7 +102,7 @@ class Solution:
             # even length
             l, r = i, i+1
             while l >= 0 and r < len(s) and s[l] == s[r]:
-                if (r - l + 1) > resLen:
+                if (r + 1 - l) > resLen:
                     res = s[l: r+1]
                     resLen = r - l + 1
                 l -= 1
@@ -209,8 +209,7 @@ class Solution:
 ```
 class Solution:
     def intToRoman(self, num):
-        value_map = {1000: "M",900: "CM",500: "D",400: "CD",100: "C",90: "XC",
-                     50: "L",40: "XL",10: "X",9: "IX",5: "V",4: "IV",1: "I",}
+        value_map = {1000: "M",900: "CM",500: "D",400: "CD",100: "C",90: "XC",50: "L",40: "XL",10: "X",9: "IX",5: "V",4: "IV",1: "I",}
         res = ''
         for i in value_map:
             count = num // i

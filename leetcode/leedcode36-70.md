@@ -121,9 +121,19 @@ class Solution:
 >输出：[[1,6],[8,10],[15,18]]          
 >解释：区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].      
 ```
-
+class Solution:
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        #o(nlog)
+        intervals.sort(key=lambda i:i[0])
+        output = [intervals[0]]
+        for start, end in intervals[1:]:
+            lastEnd = output[-1][1]
+            if start <= lastEnd:
+                output[-1][1] = max(lastEnd, end)
+            else:
+                output.append([start, end])
+        return  output
 ```
-
 ### 58. 最后一个单词的长度
 >输入：s = "Hello World"             
 >输出：5           
@@ -133,6 +143,32 @@ class Solution:
     def lengthOfLastWord(self, s: str) -> int:
         strings = s.strip().split(' ')
         return len(strings[-1])
+```
+### 62.不同路径
+![](pic/uniquePaths.png)
+```
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        row = [1] * n
+        for i in range(m-1):
+            newRow = [1] * n
+            for j in range(n-2, -1, -1):
+                newRow[j] = newRow[j+1] + row[j]
+            row = newRow
+        return row[0]
+```
+### 64.最小路径和
+![](pic/minPathSum.png)
+```
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        ROWS, COLS = len(grid), len(grid[0])
+        res = [[float('inf')] * (COLS + 1) for r in range(ROWS + 1)]
+        res[ROWS - 1][COLS] = 0
+        for r in range(ROWS - 1, -1, -1):
+            for c in range(COLS - 1, -1, -1):
+                res[r][c] = grid[r][c] + min(res[r + 1][c], res[r][c + 1])
+        return res[0][0]
 ```
 ### 66.加一
 >示例 1：

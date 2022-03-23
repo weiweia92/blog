@@ -1,3 +1,21 @@
+### 71. 简化路径
+![](pic/simplifyPath.png)
+```
+class Solution:
+    def simplifyPath(self, path: str) -> str:
+        stack = []
+        cur = ''
+        for c in path + '/':
+            if c == '/':
+                if cur == '..':
+                    if stack: stack.pop()
+                elif cur != '' and cur != '.':
+                    stack.append(cur)
+                cur = ''
+            else:
+                cur += c
+        return '/' + '/'.join(stack)
+```
 ### 83. 删除排序链表中的重复元素
 ![](pic/deleteDuplicates.png)
 ```
@@ -36,6 +54,9 @@ class Solution:
             nums1[m+i] = nums2[i]
         return nums1.sort()
 ```
+### 91. 解码方法
+![](pic/numDecoding.png)
+
 ### 118. 杨辉三角
 ![](pic/yanghuitriangle.png)
 ```
