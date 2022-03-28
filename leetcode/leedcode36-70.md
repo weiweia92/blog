@@ -48,6 +48,48 @@ class Solution:
                 ans.append([num] + y)
         return ans
 ```
+### 48. 旋转图像
+![](pic/rotate.png)
+```
+class Solution:
+    def rotate(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        l, r = 0, len(matrix) - 1
+        while l < r:
+            for i in range(r - l):
+                top, bottom = l, r 
+                # save the topLeft
+                topLeft = matrix[top][l + i]
+                # move bottom left into top left
+                matrix[top][l + i] = matrix[bottom - i][l]
+                # move bottom right into bottom left
+                matrix[bottom - i][l] = matrix[bottom][r - i]
+                # move top right into bottom right
+                matrix[bottom][r - i] = matrix[top + i][r]
+                # move top left into top right
+                matrix[top + i][r] = topLeft
+            l += 1
+            r -= 1
+```
+### 49.字母异位词分组
+给你一个字符串数组，请你将 字母异位词 组合在一起。可以按任意顺序返回结果列表。字母异位词 是由重新排列源单词的字母得到的一个新单词，所有源单词中的字母通常恰好只用一次。
+>输入: strs = ["eat", "tea", "tan", "ate", "nat", "bat"]           
+>输出: [["bat"],["nat","tan"],["ate","eat","tea"]]    
+```
+class Solution:
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        # defaultdict(list):构建一个默认value为list的字典
+        res = defaultdict(list) # mapping charCount to list of Anagrams
+        for s in strs:
+            count = [0] * 26 # a...z
+            for c in s:
+                count[ord(c) - ord('a')] += 1
+            res[tuple(count)].append(s)
+        return list(res.values())
+```
+
 ### 50. Pow(x, n)
 ```
 class Solution:
@@ -62,7 +104,38 @@ class Solution:
         else:
             return x * self.myPow(x, n-1)
 ```
-### 53.最大子数组和
+### 51. N皇后
+![](pic/NQueens.png)
+```
+class Solution:
+    def solveNQueens(self, n: int) -> List[List[str]]:
+        col = set()
+        posDiag = set() # (r + c)
+        negDiag = set() # (r - c)
+        res = []
+        board = [['.'] * n for i in range(n)]
+
+        def backtrack(r):
+            if r == n:
+                copy = [''.join(row) for row in board]
+                res.append(copy)
+                return
+            for c in range(n):
+                if c in col or (r + c) in posDiag or (r - c) in negDiag:
+                    continue
+                col.add(c)
+                posDiag.add(r + c)
+                negDiag.add(r - c)
+                board[r][c] = 'Q'
+                backtrack(r + 1)
+                col.remove(c)
+                posDiag.remove(r + c)
+                negDiag.remove(r - c)
+                board[r][c] = '.'
+        backtrack(0)
+        return res
+```
+### 53. 最大子数组和
 >输入：nums = [-2,1,-3,4,-1,2,1,-5,4]          
 >输出：6          
 >解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。      
@@ -134,6 +207,24 @@ class Solution:
                 output.append([start, end])
         return  output
 ```
+### 57. 插入区间
+给你一个 无重叠的 ，按照区间起始端点排序的区间列表。在列表中插入一个新的区间，你需要确保列表中的区间仍然有序且不重叠（如果有必要的话，可以合并区间）。
+>输入：intervals = [[1,3],[6,9]], newInterval = [2,5]         
+>输出：[[1,5],[6,9]]         
+```
+class Solution:
+    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+        intervals.append(newInterval)
+        intervals.sort(key=lambda i:i[0])
+        output = [intervals[0]]
+        for start, end in intervals[1:]:
+            lastEnd = output[-1][1]
+            if start <= lastEnd:
+                output[-1][1] = max(lastEnd, end)
+            else:
+                output.append([start, end])
+        return output
+```
 ### 58. 最后一个单词的长度
 >输入：s = "Hello World"             
 >输出：5           
@@ -143,6 +234,11 @@ class Solution:
     def lengthOfLastWord(self, s: str) -> int:
         strings = s.strip().split(' ')
         return len(strings[-1])
+```
+### 59. 螺旋矩阵2
+![](pic/generateMatrix.png)
+```
+
 ```
 ### 62.不同路径
 ![](pic/uniquePaths.png)
@@ -199,6 +295,32 @@ class Solution:
 class Solution:
     def addBinary(self, a: str, b: str) -> str:
         return bin(int(a,2)+int(b,2))[2:]
+```
+### 68. 文本左右对齐
+>输入: words = ["This", "is", "an", "example", "of", "text", "justification."], maxWidth = 16         
+>输出:       
+>[                
+>   "This    is    an",          
+>   "example  of text",           
+>   "justification.  "           
+>]              
+```
+class Solution:
+    def fullJustify(self, words: List[str], maxWidth: int) -> List[str]:
+        lst = []
+        res = []
+        n = 0
+        for w in words:
+            while n + len(lst) + len(w) > maxWidth:
+                gaps = len(lst) - 1 or 1
+                q, rem = divmod(maxWidth - n, gaps)
+                for i in range(gaps):
+                    lst[i] += ' ' * q + (' ' if i < rem else '')
+                res.append(''.join(lst))
+                n, lst = 0, []
+            lst.append(w)
+            n += len(w)
+        return res + [' '.join(lst).ljust(maxWidth)] if lst else []
 ```
 ### 69. x的平方根
 给你一个非负整数 x ，计算并返回 x 的 算术平方根 。由于返回类型是整数，结果只保留 整数部分 ，小数部分将被 舍去 。
