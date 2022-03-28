@@ -16,6 +16,140 @@ class Solution:
                 cur += c
         return '/' + '/'.join(stack)
 ```
+### 73. 矩阵置零
+![](pic/setZeros.png)
+```
+class Solution:
+    def setZeroes(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        m, n = len(matrix), len(matrix[0])
+        tmp = []
+        for i in range(m):
+            for j in range(n):
+                if matrix[i][j] == 0:
+                    tmp.append([i, j])
+        for r, c in tmp:
+            for i in range(n):
+                matrix[r][i] = 0
+            for j in range(m):
+                matrix[j][c] = 0
+```
+### 74. 搜索二维矩阵
+![](pic/searchMatrix.png)
+```
+class Solution:
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        ROWS, COLS = len(matrix), len(matrix[0])
+        top, bot = 0, ROWS - 1
+        while top <= bot:
+            row = (top + bot) // 2
+            if target > matrix[row][-1]:
+                top = row + 1
+            elif target < matrix[row][0]:
+                bot = row - 1
+            else:
+                break
+        if not (top <= bot):
+            return False
+        row = (top + bot) // 2
+        l, r = 0, COLS - 1
+        while l <= r:
+            m = (l + r) // 2
+            if target < matrix[row][m]:
+                r = m - 1
+            elif target > matrix[row][m]:
+                l = m + 1
+            else:
+                return True
+        return False 
+```
+### 75. 颜色分类
+给定一个包含红色、白色和蓝色、共 n 个元素的数组 nums ，原地对它们进行排序，使得相同颜色的元素相邻，并按照红色、白色、蓝色顺序排列。我们使用整数 0、 1 和 2 分别表示红色、白色和蓝色。必须在不使用库的sort函数的情况下解决这个问题。
+>输入：nums = [2,0,2,1,1,0]             
+>输出：[0,0,1,1,2,2]           
+```
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        l, r = 0, len(nums) - 1
+        i = 0
+        def swap(i, j):
+            nums[i], nums[j] = nums[j], nums[i]
+        while i <= r:
+            if nums[i] == 0:
+                swap(l, i)
+                l += 1
+            elif nums[i] == 2:
+                swap(r, i)
+                r -= 1
+                i -= 1
+            i += 1
+```
+### 78. 子集
+>输入：nums = [1,2,3]          
+>输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]          
+```
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        res = []
+        subset = []
+        def dfs(i):
+            if i >= len(nums):
+                res.append(subset.copy())
+                return 
+
+            # decision to include nums[i]
+            subset.append(nums[i])
+            dfs(i + 1)
+
+            # decision NOT to include nums[i]
+            subset.pop()
+            dfs(i + 1)
+        dfs(0)
+        return res
+```
+### 79. 单词搜索
+![](pic/exist.png)
+```
+class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        ROWS, COLS = len(board), len(board[0])
+        path = set()
+        def dfs(r, c, i):
+            if i == len(word):
+                return True
+            if (r < 0 or c < 0 or r >= ROWS or c >= COLS 
+                or word[i] != board[r][c] or (r, c) in path):
+                return False
+            path.add((r, c))
+            res = (dfs(r+1, c, i+1) or dfs(r, c+1, i+1)
+                   or dfs(r-1, c, i+1) or dfs(r, c-1, i+1))
+            path.remove((r, c))
+            return res
+
+        for r in range(ROWS):
+            for c in range(COLS):
+                if dfs(r, c, 0): return True
+        return False
+```
+### 80. 删除有序数组中的重复项2
+给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 最多出现两次 ，返回删除后数组的新长度。不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
+>输入：nums = [1,1,1,2,2,3]         
+>输出：5, nums = [1,1,2,2,3]        
+```
+class Solution:
+    def removeDuplicates(self, nums: List[int]) -> int:
+        i = 0
+        for n in nums:
+            if i < 2 or n != nums[i-2]:
+                nums[i] = n 
+                i += 1
+        return i
+```
 ### 83. 删除排序链表中的重复元素
 ![](pic/deleteDuplicates.png)
 ```
@@ -53,6 +187,11 @@ class Solution:
         for i in range(n):
             nums1[m+i] = nums2[i]
         return nums1.sort()
+```
+### 89. 格雷编码
+![](pic/grayCode.png)
+```
+
 ```
 ### 91. 解码方法
 ![](pic/numDecoding.png)
