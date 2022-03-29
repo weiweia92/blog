@@ -14,7 +14,8 @@ class Solution:
         for i, num in enumerate(nums):
             if target - num not in hashtable:
                 hashtable[num] = i
-            return hashtable[target - num], i
+            else:
+                return hashtable[target - num], i
 ```
 ### 2.两数相加
 
