@@ -278,7 +278,8 @@ class Solution:
                     l += 1
                     while nums[l] == nums[l - 1] and l < r:
                         l += 1
-                if threeSum < 0:
+                # 注意：条件也是有顺序的，先看小于0的，后看大于0的，如果颠倒就不对了
+                if threeSum < 0: 
                     l += 1
                 else:
                     r -= 1
@@ -398,26 +399,22 @@ class Solution:
 >输出：["((()))","(()())","(())()","()(())","()()()"]
 ```
 class Solution:
-    def generateParenthesis(self, n):
-        # only add open paranthesis if open < n
-        # only add close paranthesis if closed < open
-        # valide IIF open == closed == n
-        stack = []
-        res = []
-        def backtrack(openN, closeN):
-            if openN == closeN == n:
-                res.append(''.join(stack))
-                return
-            if openN < n:
-                stack.append('(')
-                backtrack(openN + 1, closeN)
-                stack.pop()
-            if closeN < openN:
-                stack.append(')')
-                backtrack(openN, closeN + 1)
-                stack.pop()
-        backtrack(0, 0)
-        return res
+    def generateParenthesis(self, n: int) -> List[str]:
+        if n == 0:
+            return []
+        result = []
+        self.helper(n, n, '', result)
+        return result
+    
+    def helper(self, l, r, item, result):
+        if r < l:
+            return 
+        if l > 0:
+            self.helper(l-1, r, item + '(', result)
+        if r > 0:
+            self.helper(l, r-1, item + ')', result)
+        if l == 0 and r == 0:
+            result.append(item)
 ```
 ### 23. 合并K个升序链表
 >输入：lists = [[1,4,5],[1,3,4],[2,6]]           
