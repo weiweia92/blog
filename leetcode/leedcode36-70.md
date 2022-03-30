@@ -1,14 +1,64 @@
+### 36. 有效的数独
+```
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        cols = collections.defaultdict(set)
+        rows = collections.defaultdict(set)
+        squares = collections.defaultdict(set)
+        for r in range(9):
+            for c in range(9):
+                if board[r][c] == '.':
+                    continue
+                if (board[r][c] in rows[r] or
+                    board[r][c] in cols[c] or
+                    board[r][c] in squares[(r//3,c//3)]):
+                    return False
+                cols[c].add(board[r][c])
+                rows[r].add(board[r][c])
+                squares[(r//3,c//3)].add(board[r][c])
+        return True
+```
+### 38. 外观数列
+![](pic/countAndSay.png)
+```
+class Solution:
+    def countAndSay(self, n: int) -> str:
+        seq = '1'
+        for i in range(n - 1):
+            seq = self.getNext(seq)
+        return seq
+
+    def getNext(self, seq):
+        i, next_seq = 0, ''
+        while i < len(seq):
+            count = 1
+            while i < len(seq) - 1 and seq[i] == seq[i+1]:
+                count += 1
+                i += 1
+            next_seq += str(count) + seq[i]
+            i += 1
+        return next_seq
+```
 ### 39. 组合总和
-给你一个 无重复元素 的整数数组 candidates 和一个目标整数 target ，找出 candidates 中可以使数字和为目标数 target 的 所有 不同组合 ，并以列表形式返回。你可以按 任意顺序 返回这些组合。
-
-candidates 中的 同一个 数字可以 无限制重复被选取 。如果至少一个数字的被选数量不同，则两种组合是不同的。 
-
-对于给定的输入，保证和为 target 的不同组合数少于 150 个。
+给你一个 无重复元素 的整数数组 candidates 和一个目标整数 target ，找出 candidates 中可以使数字和为目标数 target 的 所有 不同组合 ，并以列表形式返回。你可以按 任意顺序 返回这些组合.candidates 中的 同一个 数字可以 无限制重复被选取 。如果至少一个数字的被选数量不同，则两种组合是不同的。 对于给定的输入，保证和为 target 的不同组合数少于 150 个。
 >输入: candidates = [2,3,5], target = 8            
 >输出: [[2,2,2,2],[2,3,3],[3,5]]
 ```
-
-
+class Solution:
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        candidates.sort()
+        res = []
+        def backtrack(pos, cur, target):
+            if target == 0:
+                res.append(cur.copy())
+            if target < 0:
+                return
+            for i in range(pos, len(candidates)):
+                cur.append(candidates[i])
+                backtrack(i, cur, target - candidates[i])
+                cur.pop()
+        backtrack(0, [], target)
+        return res
 ```
 ### 43. 字符串相乘
 >输入: num1 = "2", num2 = "3"          
