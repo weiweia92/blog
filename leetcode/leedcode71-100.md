@@ -239,6 +239,25 @@ class Solution:
             numTree[nodes] = total
         return numTree[n]
 ```
+### 98. 验证二叉搜索树
+![](pic/isValidBFS.png)
+```
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isValidBST(self, root: TreeNode) -> bool:
+        return self.valid(root, float('-inf'), float('inf'))
+    def valid(self, root, min, max):
+        if not root:
+            return True
+        if not (root.val > min and root.val < max ):
+            return False
+        return self.valid(root.left, min, root.val) and self.valid(root.right, root.val, max)
+```
 ### 100. 相同的树
 ![](pic/reverseBetween.png)
 ```
