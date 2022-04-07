@@ -1346,6 +1346,12 @@ class Solution:
 ```
 ### 91. 解码方法
 ![](pic/numDecoding.png)
+>1,n=0             
+>f(n-1)+f(n-2), else if n>=2 and if s[n-1]>0 and 10<=s[n-2:n]<=26             
+>f(n-1), else if n>=1 and s[n-1]>0 #'32'               
+>f(n-2), else if n>=2 and 10<=s[n-2:n]<=26 #'10'            
+>0, otherwise #'0'           
+
 ### 92. 反转列表2
 ![](pic/reverseBetween.png)
 ```
@@ -1403,6 +1409,36 @@ class Solution:
             
         getIP([], 0)
         return rst
+```
+### 94. 二叉树的中序遍历
+             1
+            / \
+           2   5
+          / \ / \
+         3  4 6  7
+inorderTraversal:[3,2,4,1,6,5,7]
+方法1：         
+```
+class Solution:
+    def inorderTraversal(self,root):
+        if root is None:
+            return []
+        return self.inorderTraversal(root.left)+[root.val]+self.inorderTraversal(root.right)
+```
+方法2：           
+```
+class Solution:
+    def inorderTraversal(self, root):
+        stack = []
+        result = []
+        while root is not None or stack != []:
+            while root is not None:
+                stack.append(root)
+                root = root.left
+            root = stack.pop()
+            result.append(root.val)
+            root = root.right
+        return result
 ```
 ### 96. 不同的二叉搜索树
 ![](pic/numTrees.png)
