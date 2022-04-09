@@ -248,7 +248,6 @@ class Solution:
     def longestCommonPrefix(self, strs):
         commonPrefix = ''
         length = min(len(word) for word in strs)
-        strs = [word.lower() for word in strs]
         for i in range(length):
             dic = set([word[i] for word in strs])
             if len(list(dic)) == 1:
