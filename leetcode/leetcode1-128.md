@@ -332,12 +332,11 @@ class Solution:
     def removeNthFromEnd(self, head, n):
         if not head:
             return head
-        slow = ListNode()
-        slow.next = head
-        fast = slow
+        fast, slow = ListNode(), ListNode()
+        fast.next = slow.next = head
         for i in range(n):
             fast = fast.next
-        while (fast.next != None):
+        while fast.next:
             slow = slow.next
             fast = fast.next
         if slow.next = head:
@@ -573,13 +572,12 @@ class Solution:
         nums[pivot:] = sorted(nums[pivot:])
 ```
 ### 32. 最长有效括号
-```
-
-```
 给你一个只包含 '(' 和 ')' 的字符串，找出最长有效（格式正确且连续）括号子串的长度。
 >输入：s = "(()"
 >输出：2
 >解释：最长有效括号子串是 "()"
+```
+```
 ### 33. 搜索旋转排序数组
 整数数组 nums 按升序排列，数组中的值 互不相同 。
 
@@ -1300,6 +1298,32 @@ class Solution:
                 i += 1
         return i
 ```
+### 81.
+```
+class Solution:
+    def search(self, nums, target):
+        left = 0
+        right = len(nums) - 1
+        while left <= right:
+            mid = (left + right) // 2
+            if target == nums[mid]:
+                return True
+            while left < mid and nums[left] == nums[mid]:
+                left += 1
+            # look to the left hand side
+            if nums[left] <= nums[mid]:
+                if nums[left] <= target < nums[mid]:
+                    right = mid - 1
+                else:
+                    left = mid + 1
+            else:
+                if nums[mid] < target <= nums[right]:
+                    left = mid + 1
+                else:
+                    right = mid - 1
+        return False
+```
+### 82. 
 ### 83. 删除排序链表中的重复元素
 ![](pic/deleteDuplicates.png)
 ```
@@ -1379,35 +1403,20 @@ class Solution:
 例如："0.1.2.201" 和 "192.168.1.1" 是 有效 IP 地址，但是 "0.011.255.245"、"192.168.1.312" 和 "192.168@1.1" 是 无效 IP 地址。
 ```
 class Solution:
-    def restoreIpAddresses(self, s: str) -> list:
-        """
-            一共四位，每一位都可以取 0 - 255之间这些数字，也就是，每一位都可以取 1 - 3位，也就是每一位都有三种取法。
-            抽象出来就是四层，三叉树。
-            从中去掉不符合规则的就可以了。
-        """
-        if len(s) < 4: return []
-        
-        rst = []
-        def getIP(IP: list, idx):
-            if len(IP) == 4:
-                if idx == len(s):
-                    rst.append('.'.join(IP))
+    def restoreIpAddresses(self, s):
+        res = []
+        if len(s) > 12:
+            return res
+        def backtrack(i, dots, curIP):
+            if dots == 4 and i == len(s): # remove last char '.'
+                res.append(curIP[:-1])
                 return 
-                
-            for i in range(1, 4):
-                if idx + i > len(s):
-                    continue
-                sub = s[idx: idx + i]
-                if len(sub) > 1 and sub[0] == '0':
-                    continue
-                if int(sub) > 255:
-                    continue
-                IP.append(sub)
-                getIP(IP, idx + i)
-                IP.pop()
-            
-        getIP([], 0)
-        return rst
+            if dots > 4:return
+            for j in range(i, min(i+3, len(s))):
+                if int(s[i:j+1]) < 256 and (i==j or s[i] != '0'):
+                    backtrack(j+1, dots+1, curIP+s[i:j+1]+'.')
+        backtrack(0, 0, '')
+        return res
 ```
 ### 94. 二叉树的中序遍历
              1
